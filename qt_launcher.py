@@ -69,7 +69,7 @@ class qt_launcher(main_ui_2.Ui_MainWindow,QtWidgets.QMainWindow):
         print(str(toolname))
         os.startfile(tooldir[toolname]) 
 
-
+print("test_test")
 
 
 if __name__ == '__main__':
