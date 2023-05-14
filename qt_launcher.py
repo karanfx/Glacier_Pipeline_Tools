@@ -7,7 +7,9 @@ import json
 import PySide6.QtCore
 import PySide6.QtWidgets
 
-import main_ui_2
+import main_ui_3
+import create_project_ui
+
 
 studio_dir = 'D:\Work\houdinifx'
 shotdir = ''
@@ -15,11 +17,12 @@ toolpicked = ''
 tooldir = json.load(open('tools_path.json'))
 
 
-class qt_launcher(main_ui_2.Ui_MainWindow,QtWidgets.QMainWindow):
+class qt_launcher(main_ui_3.Ui_MainWindow,QtWidgets.QMainWindow):
     def __init__(self):
         super(qt_launcher,self).__init__()
         self.setupUi(self)
         self.setWindowTitle("App Launcher - Build 1.2.0")
+        
         self.toolssetup()
         self.populate_project()
         #self.populate_shot()
@@ -29,14 +32,15 @@ class qt_launcher(main_ui_2.Ui_MainWindow,QtWidgets.QMainWindow):
         self.manual_toolButton.clicked.connect(self.manual_dir)
 
     def populate_project(self):
-        prodirs = os.listdir(studio_dir)
+        prodirs = [ name for name in os.listdir(studio_dir) if os.path.isdir(os.path.join(studio_dir, name)) ]
         self.project_cB.addItems(prodirs)
 
     
     def populate_shot(self):
         sel_pro = self.project_cB.currentText()
         if sel_pro:
-            shotdirs = os.listdir(studio_dir + '\\' + sel_pro)
+            shotdirs = studio_dir + '\\' + sel_pro
+            shotdirs = [ name for name in os.listdir(shotdirs) if os.path.isdir(os.path.join(shotdirs, name)) ]
             self.shot_cB.addItems(shotdirs)
         #def select_tools():
     
@@ -44,7 +48,8 @@ class qt_launcher(main_ui_2.Ui_MainWindow,QtWidgets.QMainWindow):
         sel_pro = self.project_cB.currentText()
         subdir = self.shot_cB.currentText()
         if subdir:
-            subdirs = os.listdir(studio_dir + '\\' + sel_pro+'\\'+ subdir)
+            subdirs = studio_dir + '\\' + sel_pro+'\\'+ subdir
+            subdirs = [ name for name in os.listdir(subdirs) if os.path.isdir(os.path.join(subdirs, name)) ]
             self.subdir_cB.addItems(subdirs)
 
         cur_subdir = self.subdir_cB.currentText()
@@ -69,8 +74,7 @@ class qt_launcher(main_ui_2.Ui_MainWindow,QtWidgets.QMainWindow):
         print(str(toolname))
         os.startfile(tooldir[toolname]) 
 
-print("test_test")
-
+    #print("test_test")
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication()
