@@ -69,6 +69,9 @@ class qt_launcher(main_ui_2.Ui_MainWindow,QtWidgets.QMainWindow):
         print(str(toolname))
         os.startfile(tooldir[toolname]) 
 
+
+
+
 if __name__ == '__main__':
     app = QtWidgets.QApplication()
     appLaunch = qt_launcher()
