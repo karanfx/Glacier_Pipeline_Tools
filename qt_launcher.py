@@ -30,6 +30,7 @@ class qt_launcher(main_ui_3.Ui_MainWindow,QtWidgets.QMainWindow):
         self.shot_cB.currentTextChanged.connect(self.populate_subdir)
         self.launch_button.clicked.connect(self.opentool)
         self.manual_toolButton.clicked.connect(self.manual_dir)
+        self.action_Create_Project.triggered.connect(self.create_project)
 
     def populate_project(self):
         prodirs = [ name for name in os.listdir(studio_dir) if os.path.isdir(os.path.join(studio_dir, name)) ]
@@ -65,6 +66,16 @@ class qt_launcher(main_ui_3.Ui_MainWindow,QtWidgets.QMainWindow):
         if not man_path:
             QtWidgets.QMessageBox.about(self,"path Required","Please, pick the path")
 
+    def create_project(self, s):
+        print("click", s)
+
+        dlg = dialog()
+        if dlg.exec():
+            print("Success!")
+        else:
+            print("Cancel!")
+
+
 
     def toolssetup(self):
         self.tools_cB.addItems(tooldir)
@@ -75,6 +86,13 @@ class qt_launcher(main_ui_3.Ui_MainWindow,QtWidgets.QMainWindow):
         os.startfile(tooldir[toolname]) 
 
     #print("test_test")
+
+class dialog(create_project_ui.Ui_Dialog,QtWidgets.QDialog):
+    def __init__(self):
+        super(dialog,self).__init__()
+        self.setupUi(self)
+        self.setWindowTitle("App Launcher - Build 1.2.0")
+
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication()
