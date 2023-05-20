@@ -30,9 +30,10 @@ class qt_launcher(main_ui_3.Ui_MainWindow,QtWidgets.QMainWindow):
         self.shot_cB.currentTextChanged.connect(self.populate_subdir)
         self.launch_button.clicked.connect(self.opentool)
         self.manual_toolButton.clicked.connect(self.manual_dir)
+
         self.action_Create_Project.triggered.connect(self.create_project)
 
-    def populate_project(self):
+    def populate_project(self):                                  #populate project dirs
         prodirs = [ name for name in os.listdir(studio_dir) if os.path.isdir(os.path.join(studio_dir, name)) ]
         self.project_cB.addItems(prodirs)
 
@@ -58,7 +59,6 @@ class qt_launcher(main_ui_3.Ui_MainWindow,QtWidgets.QMainWindow):
 
 
     def manual_dir(self):
-        #man_path = 
         man_path,ext = QtWidgets.QFileDialog.getOpenFileName(self,'Select Folder')
         if man_path:
             self.manual_path_Ldit.setText(man_path)
@@ -92,6 +92,16 @@ class dialog(create_project_ui.Ui_Dialog,QtWidgets.QDialog):
         super(dialog,self).__init__()
         self.setupUi(self)
         self.setWindowTitle("App Launcher - Build 1.2.0")
+        self.Project_TB.clicked.connect(self.manual_dir)
+
+    def manual_dir(self):
+        man_path = QtWidgets.QFileDialog.getExistingDirectory(self,'Select Folder')
+        #QtWidgets.QFileDialog.getExistingDirectory
+        if man_path:
+            self.project_LE.setText(man_path)
+
+        if not man_path:
+            QtWidgets.QMessageBox.about(self,"path Required","Please, pick the path")
 
 
 if __name__ == '__main__':
