@@ -137,12 +137,14 @@
      <string>Mode</string>
     </property>
     <addaction name="action_Create_Project"/>
+    <addaction name="action_Add_Apps"/>
     <addaction name="action_Exit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
      <string>Help</string>
     </property>
+    <addaction name="actionDoc"/>
    </widget>
    <addaction name="menuMode"/>
    <addaction name="menuHelp"/>
@@ -156,6 +158,16 @@
   <action name="action_Exit">
    <property name="text">
     <string>Exit</string>
+   </property>
+  </action>
+  <action name="action_Add_Apps">
+   <property name="text">
+    <string>Add Apps</string>
+   </property>
+  </action>
+  <action name="actionDoc">
+   <property name="text">
+    <string>Doc</string>
    </property>
   </action>
  </widget>
