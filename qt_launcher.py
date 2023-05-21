@@ -16,6 +16,7 @@ studio_dir = 'D:\Work\houdinifx'
 shotdir = ''
 toolpicked = ''
 tooldir = json.load(open('tools_path.json'))
+jsonpath = "softpaths.json"
 
 
 class qt_launcher(main_ui_3.Ui_MainWindow,QtWidgets.QMainWindow):
@@ -147,15 +148,16 @@ class addsoft(add_software_ui.Ui_Dialog,QtWidgets.QDialog):
     def add_to_json(self):
         softname = self.softname_LE.text()
         softpath = self.softpath_LE.text()
-        tooldir = json.load(open('tools_path.json'))
+        #tooldir = json.load(open('tools_path.json'))
         # Serializing json
-        jsonpath = "softpaths.json"
+        
         j_soft = {softname: softpath}
+        j_soft.update()
         json_object = json.dumps(j_soft, indent=4)   
  
     # Writing to sample.json
         with open(jsonpath, "w") as outfile:
-            
+            #json_object = json_object + "," + json_object
             outfile.write(json_object)
            
         # tooldir = json.dumps(softname,softpath)
