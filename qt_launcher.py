@@ -69,23 +69,14 @@ class qt_launcher(main_ui_3.Ui_MainWindow,QtWidgets.QMainWindow):
         if not man_path:
             QtWidgets.QMessageBox.about(self,"path Required","Please, pick the path")
 
-    def create_project(self, s):
-        print("click", s)
-
+    def create_project(self):
+        
         dlg = dialog()
-        if dlg.exec():
-            print("Success!")
-        else:
-            print("Cancel!")
+        dlg.exec()
 
-    def addsoft(self, s):
-        print("click", s)
-
+    def addsoft(self):
         dlg = addsoft()
-        if dlg.exec():
-            print("Success!")
-        else:
-            print("Cancel!")
+        dlg.exec()
 
 
 
@@ -108,7 +99,7 @@ class dialog(create_project_ui.Ui_Dialog,QtWidgets.QDialog):
         self.Project_TB.clicked.connect(self.manual_dir)
         self.Seq_TB.clicked.connect(self.manual_dir)
         self.Shot_TB.clicked.connect(self.manual_dir)
-        self.create_buttons.accepted.connect(self.savepath)
+        self.create_buttons.accepted.connect(self.create_pro_dirs)
         
 
     def manual_dir(self):
@@ -116,19 +107,42 @@ class dialog(create_project_ui.Ui_Dialog,QtWidgets.QDialog):
         #QtWidgets.QFileDialog.getExistingDirectory
         if man_path:
             self.project_LE.setText(man_path)
-            self.Seq_LE.setText(man_path)
-            self.Shot_LE.setText(man_path)
+            # self.Seq_LE.setText(man_path)
+            # self.Shot_LE.setText(man_path)
             
 
         if not man_path:
             QtWidgets.QMessageBox.about(self,"path Required","Please, pick the path")
 
-    def savepath(self):
-        propath = ['none']
-        pro_path = self.Shot_LE.text()
-        #self.Shot_LE.
-        propath.append(pro_path)
-        print(pro_path)
+    def create_pro_dirs(self):
+        prodir = self.project_LE.text()
+        seqdir = self.Seq_LE.text()
+        shotdir = self.Shot_LE.text()
+        shot_subdirs = ['houdini','nuke']
+        dcc_subdir = ['hip','renders','cache']
+
+        prodir.replace('\\','/')
+        # os.mkdir(prodir)
+        #os.mkdir(os.path.join(prodir,seqdir,shotdir))
+        mkdir = prodir + '/' +seqdir + '/' + shotdir
+
+        for sub in shot_subdirs:
+            for dsub in dcc_subdir:
+                os.makedirs(mkdir+'/'+sub+'/'+dsub)
+
+
+
+
+
+
+
+
+    # def savepath(self):
+    #     propath = ['none']
+    #     pro_path = self.Shot_LE.text()
+    #     #self.Shot_LE.
+    #     propath.append(pro_path)
+    #     print(pro_path)
 
 # Add Software Dialog
 
