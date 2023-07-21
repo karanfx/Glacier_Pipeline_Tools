@@ -9,19 +9,20 @@ import qdarkstyle
 import PySide6.QtCore
 import PySide6.QtWidgets
 
-import main_ui_3_treeWid
-import create_project_ui
-import add_software_ui
+# from ui import main_ui_3_treeWid
+import ui.main_ui_3_treeWid
+import ui.create_project_ui
+import ui.add_software_ui
 
 
 studio_dir = 'D:\Work\houdinifx'
 shotdir = ''
 toolpicked = ''
-tooldir = json.load(open('tools_path.json'))
-jsonpath = "softpaths.json"
+tooldir = json.load(open('bin/data/tools_path.json'))
+jsonpath = "bin/data/softpaths.json"
 
 
-class qt_launcher(main_ui_3_treeWid.Ui_MainWindow,QtWidgets.QMainWindow):
+class qt_launcher(ui.main_ui_3_treeWid.Ui_MainWindow,QtWidgets.QMainWindow):
     def __init__(self):
         super(qt_launcher,self).__init__()
         self.setupUi(self)
@@ -108,7 +109,7 @@ class qt_launcher(main_ui_3_treeWid.Ui_MainWindow,QtWidgets.QMainWindow):
     #print("test_test")
 
 #Create Project Dialog 
-class dialog(create_project_ui.Ui_Dialog,QtWidgets.QDialog):
+class dialog(ui.create_project_ui.Ui_Dialog,QtWidgets.QDialog):
     def __init__(self):
         super(dialog,self).__init__()
         self.setupUi(self)
@@ -164,7 +165,7 @@ class dialog(create_project_ui.Ui_Dialog,QtWidgets.QDialog):
 
 # Add Software Dialog
 
-class addsoft(add_software_ui.Ui_Dialog,QtWidgets.QDialog):
+class addsoft(ui.add_software_ui.Ui_Dialog,QtWidgets.QDialog):
     def __init__(self):
         super(addsoft,self).__init__()
         self.setupUi(self)
