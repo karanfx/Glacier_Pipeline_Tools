@@ -2,12 +2,14 @@ from typing import Optional
 from PySide6 import QtWidgets
 import os
 import json
+import qdarkstyle
+
 
 
 import PySide6.QtCore
 import PySide6.QtWidgets
 
-import main_ui_3
+import main_ui_3_treeWid
 import create_project_ui
 import add_software_ui
 
@@ -19,7 +21,7 @@ tooldir = json.load(open('tools_path.json'))
 jsonpath = "softpaths.json"
 
 
-class qt_launcher(main_ui_3.Ui_MainWindow,QtWidgets.QMainWindow):
+class qt_launcher(main_ui_3_treeWid.Ui_MainWindow,QtWidgets.QMainWindow):
     def __init__(self):
         super(qt_launcher,self).__init__()
         self.setupUi(self)
@@ -35,6 +37,12 @@ class qt_launcher(main_ui_3.Ui_MainWindow,QtWidgets.QMainWindow):
 
         self.action_Create_Project.triggered.connect(self.create_project)
         self.action_Add_Apps.triggered.connect(self.addsoft)
+        self.action_Exit.triggered.connect(self.close)
+        self.setStyleSheet(qdarkstyle.load_stylesheet())                    #set darkmode
+
+
+        # self.tree_wid()
+
 
     def populate_project(self):                                  #populate project dirs
         prodirs = [ name for name in os.listdir(studio_dir) if os.path.isdir(os.path.join(studio_dir, name)) ]
@@ -88,6 +96,15 @@ class qt_launcher(main_ui_3.Ui_MainWindow,QtWidgets.QMainWindow):
         print(str(toolname))
         os.startfile(tooldir[toolname]) 
 
+    # def tree_wid(self):
+    #     self.dir_tree_widget.clear()
+    #     data = {"proj A" : ["file A","file B"],
+    #             "proj B" : ["file A1","file B1"]}
+    #     item = QtWidgets.QTreeWidgetItem(["value"])
+    #     self.dir_tree_widget.insertTopLevelItems(0,item)
+        
+        
+
     #print("test_test")
 
 #Create Project Dialog 
@@ -100,6 +117,7 @@ class dialog(create_project_ui.Ui_Dialog,QtWidgets.QDialog):
         self.Seq_TB.clicked.connect(self.manual_dir)
         self.Shot_TB.clicked.connect(self.manual_dir)
         self.create_buttons.accepted.connect(self.create_pro_dirs)
+        self.setStyleSheet(qdarkstyle.load_stylesheet())                    #set darkmode
         
 
     def manual_dir(self):
@@ -153,6 +171,7 @@ class addsoft(add_software_ui.Ui_Dialog,QtWidgets.QDialog):
         self.setWindowTitle("Add Software")
         self.softpath_TB.clicked.connect(self.getsoft)
         self.reg_buttonBox.accepted.connect(self.add_to_json)
+        self.setStyleSheet(qdarkstyle.load_stylesheet())                    #set darkmode
 
     def getsoft(self):
         softpath,ext = QtWidgets.QFileDialog.getOpenFileName(self,'Select Folder')
@@ -165,17 +184,25 @@ class addsoft(add_software_ui.Ui_Dialog,QtWidgets.QDialog):
         #tooldir = json.load(open('tools_path.json'))
         # Serializing json
         
-        j_soft = {softname: softpath}
-        j_soft.update()
-        json_object = json.dumps(j_soft, indent=4)   
- 
+        #j_soft = "," + softname + ":" + softpath
+
+        # j_soft = {softname:softpath}
+        # j_soft.update()
+
+        #json_object['key'] =['object'] 
+        #json_object = json.dumps(j_soft, indent=4)  
+        with open(jsonpath) as jsonfile:
+            j_soft = json.load(jsonfile)
+
+        j_soft['key'] = ['object']
     # Writing to sample.json
-        with open(jsonpath, "w") as outfile:
-            #json_object = json_object + "," + json_object
-            outfile.write(json_object)
+        with open(jsonpath, "a") as outfile:
+            #json_object = json_object + "," + json_object 
+            json.dump(j_soft,outfile)
+            #outfile.write(json_object)
            
         # tooldir = json.dumps(softname,softpath)
-        print(json_object)
+        #print(json_object)
 
         
 
