@@ -27,6 +27,83 @@
        <enum>QFrame::Raised</enum>
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
+       <item row="1" column="0">
+        <widget class="QTreeWidget" name="dir_tree_widget">
+         <column>
+          <property name="text">
+           <string>Shot</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Task</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Status</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Show</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
+           <string>Description</string>
+          </property>
+         </column>
+         <item>
+          <property name="text">
+           <string>New Item</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </item>
+         <item>
+          <property name="text">
+           <string>New Item</string>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+          <property name="text">
+           <string/>
+          </property>
+         </item>
+        </widget>
+       </item>
+       <item row="5" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_3">
+         <item>
+          <widget class="QLabel" name="subir_lB">
+           <property name="text">
+            <string>Sub Dir : </string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="subdir_cB"/>
+         </item>
+        </layout>
+       </item>
        <item row="6" column="0">
         <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
@@ -47,6 +124,20 @@
           </widget>
          </item>
         </layout>
+       </item>
+       <item row="10" column="0">
+        <widget class="QPushButton" name="launch_button">
+         <property name="text">
+          <string>Launch</string>
+         </property>
+        </widget>
+       </item>
+       <item row="0" column="0">
+        <widget class="Line" name="line_3">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
        </item>
        <item row="8" column="0">
         <widget class="Line" name="line">
@@ -69,47 +160,11 @@
          </item>
         </layout>
        </item>
-       <item row="4" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QLabel" name="shot_lB">
-           <property name="text">
-            <string>Shot :</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="shot_cB"/>
-         </item>
-        </layout>
-       </item>
-       <item row="1" column="0">
-        <widget class="QTreeWidget" name="dir_tree_widget">
-         <column>
-          <property name="text">
-           <string>Shot</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Task</string>
-          </property>
-         </column>
-         <column>
-          <property name="text">
-           <string>Show</string>
-          </property>
-         </column>
-         <item>
-          <property name="text">
-           <string>New Item</string>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>New Item</string>
-          </property>
-         </item>
+       <item row="2" column="0">
+        <widget class="Line" name="line_2">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
         </widget>
        </item>
        <item row="9" column="0">
@@ -126,40 +181,19 @@
          </item>
         </layout>
        </item>
-       <item row="2" column="0">
-        <widget class="Line" name="line_2">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
-       </item>
-       <item row="5" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_3">
+       <item row="4" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout">
          <item>
-          <widget class="QLabel" name="subir_lB">
+          <widget class="QLabel" name="shot_lB">
            <property name="text">
-            <string>Sub Dir : </string>
+            <string>Shot :</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="subdir_cB"/>
+          <widget class="QComboBox" name="shot_cB"/>
          </item>
         </layout>
-       </item>
-       <item row="10" column="0">
-        <widget class="QPushButton" name="launch_button">
-         <property name="text">
-          <string>Launch</string>
-         </property>
-        </widget>
-       </item>
-       <item row="0" column="0">
-        <widget class="Line" name="line_3">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
        </item>
       </layout>
      </widget>
@@ -177,17 +211,19 @@
    </property>
    <widget class="QMenu" name="menuMode">
     <property name="title">
-     <string>Mode</string>
+     <string>Menu</string>
     </property>
     <addaction name="action_Create_Project"/>
     <addaction name="action_Add_Apps"/>
     <addaction name="action_Exit"/>
+    <addaction name="actionToggle_Darkmode"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">
      <string>Help</string>
     </property>
     <addaction name="actionDoc"/>
+    <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuMode"/>
    <addaction name="menuHelp"/>
@@ -211,6 +247,16 @@
   <action name="actionDoc">
    <property name="text">
     <string>Doc</string>
+   </property>
+  </action>
+  <action name="actionAbout">
+   <property name="text">
+    <string>About</string>
+   </property>
+  </action>
+  <action name="actionToggle_Darkmode">
+   <property name="text">
+    <string>Toggle Darkmode</string>
    </property>
   </action>
  </widget>

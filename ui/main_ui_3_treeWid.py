@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'main_ui_3_treeWid.ui'
+## Form generated from reading UI file 'main_ui_4_treeWid.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.5.0
 ##
@@ -36,6 +36,10 @@ class Ui_MainWindow(object):
         self.action_Add_Apps.setObjectName(u"action_Add_Apps")
         self.actionDoc = QAction(MainWindow)
         self.actionDoc.setObjectName(u"actionDoc")
+        self.actionAbout = QAction(MainWindow)
+        self.actionAbout.setObjectName(u"actionAbout")
+        self.actionToggle_Darkmode = QAction(MainWindow)
+        self.actionToggle_Darkmode.setObjectName(u"actionToggle_Darkmode")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.gridLayout = QGridLayout(self.centralwidget)
@@ -46,6 +50,13 @@ class Ui_MainWindow(object):
         self.frame.setFrameShadow(QFrame.Raised)
         self.gridLayout_3 = QGridLayout(self.frame)
         self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.dir_tree_widget = QTreeWidget(self.frame)
+        QTreeWidgetItem(self.dir_tree_widget)
+        QTreeWidgetItem(self.dir_tree_widget)
+        self.dir_tree_widget.setObjectName(u"dir_tree_widget")
+
+        self.gridLayout_3.addWidget(self.dir_tree_widget, 1, 0, 1, 1)
+
         self.horizontalLayout_3 = QHBoxLayout()
         self.horizontalLayout_3.setObjectName(u"horizontalLayout_3")
         self.subir_lB = QLabel(self.frame)
@@ -59,49 +70,7 @@ class Ui_MainWindow(object):
         self.horizontalLayout_3.addWidget(self.subdir_cB)
 
 
-        self.gridLayout_3.addLayout(self.horizontalLayout_3, 3, 0, 1, 1)
-
-        self.gridLayout_2 = QGridLayout()
-        self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.project_lB = QLabel(self.frame)
-        self.project_lB.setObjectName(u"project_lB")
-
-        self.gridLayout_2.addWidget(self.project_lB, 0, 0, 1, 1)
-
-        self.project_cB = QComboBox(self.frame)
-        self.project_cB.setObjectName(u"project_cB")
-
-        self.gridLayout_2.addWidget(self.project_cB, 0, 1, 1, 1)
-
-
-        self.gridLayout_3.addLayout(self.gridLayout_2, 1, 0, 1, 1)
-
-        self.line = QFrame(self.frame)
-        self.line.setObjectName(u"line")
-        self.line.setFrameShape(QFrame.HLine)
-        self.line.setFrameShadow(QFrame.Sunken)
-
-        self.gridLayout_3.addWidget(self.line, 6, 0, 1, 1)
-
-        self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.shot_lB = QLabel(self.frame)
-        self.shot_lB.setObjectName(u"shot_lB")
-
-        self.horizontalLayout.addWidget(self.shot_lB)
-
-        self.shot_cB = QComboBox(self.frame)
-        self.shot_cB.setObjectName(u"shot_cB")
-
-        self.horizontalLayout.addWidget(self.shot_cB)
-
-
-        self.gridLayout_3.addLayout(self.horizontalLayout, 2, 0, 1, 1)
-
-        self.launch_button = QPushButton(self.frame)
-        self.launch_button.setObjectName(u"launch_button")
-
-        self.gridLayout_3.addWidget(self.launch_button, 8, 0, 1, 1)
+        self.gridLayout_3.addLayout(self.horizontalLayout_3, 5, 0, 1, 1)
 
         self.horizontalLayout_2 = QHBoxLayout()
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
@@ -121,7 +90,48 @@ class Ui_MainWindow(object):
         self.horizontalLayout_2.addWidget(self.manual_toolButton)
 
 
-        self.gridLayout_3.addLayout(self.horizontalLayout_2, 4, 0, 1, 1)
+        self.gridLayout_3.addLayout(self.horizontalLayout_2, 6, 0, 1, 1)
+
+        self.launch_button = QPushButton(self.frame)
+        self.launch_button.setObjectName(u"launch_button")
+
+        self.gridLayout_3.addWidget(self.launch_button, 10, 0, 1, 1)
+
+        self.line_3 = QFrame(self.frame)
+        self.line_3.setObjectName(u"line_3")
+        self.line_3.setFrameShape(QFrame.HLine)
+        self.line_3.setFrameShadow(QFrame.Sunken)
+
+        self.gridLayout_3.addWidget(self.line_3, 0, 0, 1, 1)
+
+        self.line = QFrame(self.frame)
+        self.line.setObjectName(u"line")
+        self.line.setFrameShape(QFrame.HLine)
+        self.line.setFrameShadow(QFrame.Sunken)
+
+        self.gridLayout_3.addWidget(self.line, 8, 0, 1, 1)
+
+        self.gridLayout_2 = QGridLayout()
+        self.gridLayout_2.setObjectName(u"gridLayout_2")
+        self.project_lB = QLabel(self.frame)
+        self.project_lB.setObjectName(u"project_lB")
+
+        self.gridLayout_2.addWidget(self.project_lB, 0, 0, 1, 1)
+
+        self.project_cB = QComboBox(self.frame)
+        self.project_cB.setObjectName(u"project_cB")
+
+        self.gridLayout_2.addWidget(self.project_cB, 0, 1, 1, 1)
+
+
+        self.gridLayout_3.addLayout(self.gridLayout_2, 3, 0, 1, 1)
+
+        self.line_2 = QFrame(self.frame)
+        self.line_2.setObjectName(u"line_2")
+        self.line_2.setFrameShape(QFrame.HLine)
+        self.line_2.setFrameShadow(QFrame.Sunken)
+
+        self.gridLayout_3.addWidget(self.line_2, 2, 0, 1, 1)
 
         self.horizontalLayout_4 = QHBoxLayout()
         self.horizontalLayout_4.setObjectName(u"horizontalLayout_4")
@@ -136,14 +146,22 @@ class Ui_MainWindow(object):
         self.horizontalLayout_4.addWidget(self.tools_cB)
 
 
-        self.gridLayout_3.addLayout(self.horizontalLayout_4, 7, 0, 1, 1)
+        self.gridLayout_3.addLayout(self.horizontalLayout_4, 9, 0, 1, 1)
 
-        self.dir_tree_widget = QTreeWidget(self.frame)
-        QTreeWidgetItem(self.dir_tree_widget)
-        QTreeWidgetItem(self.dir_tree_widget)
-        self.dir_tree_widget.setObjectName(u"dir_tree_widget")
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.shot_lB = QLabel(self.frame)
+        self.shot_lB.setObjectName(u"shot_lB")
 
-        self.gridLayout_3.addWidget(self.dir_tree_widget, 0, 0, 1, 1)
+        self.horizontalLayout.addWidget(self.shot_lB)
+
+        self.shot_cB = QComboBox(self.frame)
+        self.shot_cB.setObjectName(u"shot_cB")
+
+        self.horizontalLayout.addWidget(self.shot_cB)
+
+
+        self.gridLayout_3.addLayout(self.horizontalLayout, 4, 0, 1, 1)
 
 
         self.gridLayout.addWidget(self.frame, 0, 0, 1, 1)
@@ -166,7 +184,9 @@ class Ui_MainWindow(object):
         self.menuMode.addAction(self.action_Create_Project)
         self.menuMode.addAction(self.action_Add_Apps)
         self.menuMode.addAction(self.action_Exit)
+        self.menuMode.addAction(self.actionToggle_Darkmode)
         self.menuHelp.addAction(self.actionDoc)
+        self.menuHelp.addAction(self.actionAbout)
 
         self.retranslateUi(MainWindow)
 
@@ -179,17 +199,14 @@ class Ui_MainWindow(object):
         self.action_Exit.setText(QCoreApplication.translate("MainWindow", u"Exit", None))
         self.action_Add_Apps.setText(QCoreApplication.translate("MainWindow", u"Add Apps", None))
         self.actionDoc.setText(QCoreApplication.translate("MainWindow", u"Doc", None))
-        self.subir_lB.setText(QCoreApplication.translate("MainWindow", u"Sub Dir : ", None))
-        self.project_lB.setText(QCoreApplication.translate("MainWindow", u"Project", None))
-        self.shot_lB.setText(QCoreApplication.translate("MainWindow", u"Shot :", None))
-        self.launch_button.setText(QCoreApplication.translate("MainWindow", u"Launch", None))
-        self.User_lB.setText(QCoreApplication.translate("MainWindow", u"Manual path:", None))
-        self.manual_toolButton.setText(QCoreApplication.translate("MainWindow", u"...", None))
-        self.tools_lB.setText(QCoreApplication.translate("MainWindow", u"Tool", None))
+        self.actionAbout.setText(QCoreApplication.translate("MainWindow", u"About", None))
+        self.actionToggle_Darkmode.setText(QCoreApplication.translate("MainWindow", u"Toggle Darkmode", None))
         ___qtreewidgetitem = self.dir_tree_widget.headerItem()
-        ___qtreewidgetitem.setText(2, QCoreApplication.translate("MainWindow", u"New Column", None));
-        ___qtreewidgetitem.setText(1, QCoreApplication.translate("MainWindow", u"New Column", None));
-        ___qtreewidgetitem.setText(0, QCoreApplication.translate("MainWindow", u"1", None));
+        ___qtreewidgetitem.setText(4, QCoreApplication.translate("MainWindow", u"Description", None));
+        ___qtreewidgetitem.setText(3, QCoreApplication.translate("MainWindow", u"Show", None));
+        ___qtreewidgetitem.setText(2, QCoreApplication.translate("MainWindow", u"Status", None));
+        ___qtreewidgetitem.setText(1, QCoreApplication.translate("MainWindow", u"Task", None));
+        ___qtreewidgetitem.setText(0, QCoreApplication.translate("MainWindow", u"Shot", None));
 
         __sortingEnabled = self.dir_tree_widget.isSortingEnabled()
         self.dir_tree_widget.setSortingEnabled(False)
@@ -199,7 +216,14 @@ class Ui_MainWindow(object):
         ___qtreewidgetitem2.setText(0, QCoreApplication.translate("MainWindow", u"New Item", None));
         self.dir_tree_widget.setSortingEnabled(__sortingEnabled)
 
-        self.menuMode.setTitle(QCoreApplication.translate("MainWindow", u"Mode", None))
+        self.subir_lB.setText(QCoreApplication.translate("MainWindow", u"Sub Dir : ", None))
+        self.User_lB.setText(QCoreApplication.translate("MainWindow", u"Manual path:", None))
+        self.manual_toolButton.setText(QCoreApplication.translate("MainWindow", u"...", None))
+        self.launch_button.setText(QCoreApplication.translate("MainWindow", u"Launch", None))
+        self.project_lB.setText(QCoreApplication.translate("MainWindow", u"Project", None))
+        self.tools_lB.setText(QCoreApplication.translate("MainWindow", u"Tool", None))
+        self.shot_lB.setText(QCoreApplication.translate("MainWindow", u"Shot :", None))
+        self.menuMode.setTitle(QCoreApplication.translate("MainWindow", u"Menu", None))
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
     # retranslateUi
 
