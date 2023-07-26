@@ -12,7 +12,9 @@ sheet = client.open("Studio_Management").sheet1
 
 
 def get_status(username):
-    user_col = sheet.col_values(5)
+    user_col = sheet.row_values(1)
+    index = user_col.index('Artist') +1
+    user_col = sheet.col_values(index)
     #Get Artist Data from Sheets
     data =[]
     for i,name in enumerate(user_col):
@@ -28,5 +30,5 @@ def get_status(username):
     with open("bin/data/shot_status.json", "w") as file:
         json.dump(data,file)     
 
-# get_status("Rakesh")
+# get_status("Karan")
 # print(col)

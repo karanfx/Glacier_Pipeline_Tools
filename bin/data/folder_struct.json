@@ -1,0 +1,4 @@
+{
+    "houdini" : ["scene","cache","flipbook","opengl","renders","geo","dependency"],
+    "nuke" : ["scene","renders","prep","footage"]
+}

@@ -28,7 +28,7 @@ class qt_launcher(ui.main_ui_3_treeWid.Ui_MainWindow,QtWidgets.QMainWindow):
     def __init__(self):
         super(qt_launcher,self).__init__()
         self.setupUi(self)
-        self.setWindowTitle("App Launcher - Build 1.2.0")
+        self.setWindowTitle("App Launcher - Build 1.3.0")
         
         self.toolssetup()
         self.populate_project()
@@ -43,9 +43,7 @@ class qt_launcher(ui.main_ui_3_treeWid.Ui_MainWindow,QtWidgets.QMainWindow):
         self.action_Exit.triggered.connect(self.close)
         self.actionToggle_Darkmode.triggered.connect(self.toggle_dark)
         # self.setStyleSheet(qdarkstyle.load_stylesheet())                    #set darkmode
-        self.shotstatus = {}
-        with open('bin\data\status.json') as jsonfile:
-            self.shotstatus = json.load(jsonfile)
+
         self.populate_status()
 
 
@@ -63,7 +61,12 @@ class qt_launcher(ui.main_ui_3_treeWid.Ui_MainWindow,QtWidgets.QMainWindow):
 
         # shots =  ["Show01", "Seq_AB", "Shot_AB001", "Fire", "Karan", "Ready to Start", "7/25/2023", "7/31/2023", "Fire on Jungle"]
         for shot in shots:
-            
+            # Clean List
+            type(shot)
+            shot.pop(0)
+            shot.pop(0)
+            shot.remove('Karan')
+
             print(list(shot))
             item = QtWidgets.QTreeWidgetItem(list(shot))
             self.dir_tree_widget.addTopLevelItem(item)
@@ -170,21 +173,6 @@ class dialog(ui.create_project_ui.Ui_Dialog,QtWidgets.QDialog):
             for dsub in dcc_subdir:
                 os.makedirs(mkdir+'/'+sub+'/'+dsub)
 
-
-
-
-
-
-
-
-    # def savepath(self):
-    #     propath = ['none']
-    #     pro_path = self.Shot_LE.text()
-    #     #self.Shot_LE.
-    #     propath.append(pro_path)
-    #     print(pro_path)
-
-# Add Software Dialog
 
 class addsoft(ui.add_software_ui.Ui_Dialog,QtWidgets.QDialog):
     def __init__(self):
