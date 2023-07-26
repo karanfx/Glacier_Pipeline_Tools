@@ -14,7 +14,7 @@
    <string>MainWindow</string>
   </property>
   <property name="styleSheet">
-   <string notr="true">background-color: rgb(136, 136, 136);</string>
+   <string notr="true"/>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout">
@@ -46,6 +46,11 @@
          </column>
          <column>
           <property name="text">
+           <string>End Date</string>
+          </property>
+         </column>
+         <column>
+          <property name="text">
            <string>Show</string>
           </property>
          </column>
@@ -70,10 +75,16 @@
           <property name="text">
            <string/>
           </property>
+          <property name="text">
+           <string/>
+          </property>
          </item>
          <item>
           <property name="text">
            <string>New Item</string>
+          </property>
+          <property name="text">
+           <string/>
           </property>
           <property name="text">
            <string/>
@@ -215,8 +226,8 @@
     </property>
     <addaction name="action_Create_Project"/>
     <addaction name="action_Add_Apps"/>
-    <addaction name="action_Exit"/>
     <addaction name="actionToggle_Darkmode"/>
+    <addaction name="action_Exit"/>
    </widget>
    <widget class="QMenu" name="menuHelp">
     <property name="title">

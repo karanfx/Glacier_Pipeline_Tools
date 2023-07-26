@@ -2,7 +2,7 @@ import json
 import os
 from PySide6 import QtWidgets
 
-import create_project_ui
+import ui.create_project_ui
 # j = open('tools_path.json')
 # k = json.load(j)
 
@@ -10,10 +10,11 @@ import create_project_ui
 # for i in k:
 #     #print(i)
 #     print(k[i])
+
 import sys
 
 from PySide6.QtWidgets import QApplication, QDialog, QMainWindow, QPushButton
-import create_project_ui
+import ui.create_project_ui
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -34,7 +35,7 @@ class MainWindow(QMainWindow):
         else:
             print("Cancel!")
 
-class dialog(create_project_ui.Ui_Dialog,QtWidgets.QDialog):
+class dialog(ui.create_project_ui.Ui_Dialog,QtWidgets.QDialog):
     def __init__(self):
         super(dialog,self).__init__()
         self.setupUi(self)

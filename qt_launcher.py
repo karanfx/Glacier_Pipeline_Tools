@@ -14,7 +14,7 @@ import ui.main_ui_3_treeWid
 import ui.create_project_ui
 import ui.add_software_ui
 
-
+#required paths to refer
 studio_dir = 'D:\Work\houdinifx'
 shotdir = ''
 toolpicked = ''
@@ -39,13 +39,40 @@ class qt_launcher(ui.main_ui_3_treeWid.Ui_MainWindow,QtWidgets.QMainWindow):
         self.action_Create_Project.triggered.connect(self.create_project)
         self.action_Add_Apps.triggered.connect(self.addsoft)
         self.action_Exit.triggered.connect(self.close)
-        self.setStyleSheet(qdarkstyle.load_stylesheet())                    #set darkmode
+        self.actionToggle_Darkmode.triggered.connect(self.toggle_dark)
+        # self.setStyleSheet(qdarkstyle.load_stylesheet())                    #set darkmode
+        self.shotstatus = {}
+        with open('bin\data\status.json') as jsonfile:
+            self.shotstatus = json.load(jsonfile)
+        self.populate_status()
 
 
-        # self.tree_wid()
+
+    def toggle_dark(self):
+        self.setStyleSheet(qdarkstyle.load_stylesheet())
 
 
-    def populate_project(self):                                  #populate project dirs
+    def populate_status(self):
+        self.dir_tree_widget.clear()
+        self.dir_tree_widget.setAlternatingRowColors(True)
+        
+        with open("bin\data\shot_status.json") as f:
+            shots = json.load(f)
+
+        # shots =  ["Show01", "Seq_AB", "Shot_AB001", "Fire", "Karan", "Ready to Start", "7/25/2023", "7/31/2023", "Fire on Jungle"]
+        for shot in shots:
+            
+            print(list(shot))
+            item = QtWidgets.QTreeWidgetItem(list(shot))
+            self.dir_tree_widget.addTopLevelItem(item)
+
+        # for shot, details in shots.items():
+        #     item = QtWidgets.QTreeWidgetItem([details])
+        #     self.dir_tree_widget.addTopLevelItem(item)
+
+
+    #populate project dirs
+    def populate_project(self):
         prodirs = [ name for name in os.listdir(studio_dir) if os.path.isdir(os.path.join(studio_dir, name)) ]
         self.project_cB.addItems(prodirs)
 
@@ -88,7 +115,6 @@ class qt_launcher(ui.main_ui_3_treeWid.Ui_MainWindow,QtWidgets.QMainWindow):
         dlg.exec()
 
 
-
     def toolssetup(self):
         self.tools_cB.addItems(tooldir)
     
@@ -103,10 +129,6 @@ class qt_launcher(ui.main_ui_3_treeWid.Ui_MainWindow,QtWidgets.QMainWindow):
     #             "proj B" : ["file A1","file B1"]}
     #     item = QtWidgets.QTreeWidgetItem(["value"])
     #     self.dir_tree_widget.insertTopLevelItems(0,item)
-        
-        
-
-    #print("test_test")
 
 #Create Project Dialog 
 class dialog(ui.create_project_ui.Ui_Dialog,QtWidgets.QDialog):

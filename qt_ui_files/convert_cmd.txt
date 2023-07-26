@@ -1,0 +1,1 @@
+"C:\Program Files\Python311\Scripts\pyside6-uic.exe" qt_ui_files/main_ui_4_treeWid.ui -o ui/main_ui_3_treeWid.py
