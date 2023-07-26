@@ -1,7 +1,5 @@
 import json
 
-with open("bin\data\shot_status.json") as f:
-            shots = json.load(f)
+from utils.google_sheet_api import get_status
 
-
-print(type(shots))
+get_status('Harish')

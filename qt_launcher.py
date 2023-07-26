@@ -4,17 +4,19 @@ import os
 import json
 import qdarkstyle
 
-
-
 import PySide6.QtCore
 import PySide6.QtWidgets
 
-# from ui import main_ui_3_treeWid
+#Import Utils
+from utils.google_sheet_api import get_status
+
+
+#Import UIs
 import ui.main_ui_3_treeWid
 import ui.create_project_ui
 import ui.add_software_ui
 
-#required paths to refer
+#required data paths to refer
 studio_dir = 'D:\Work\houdinifx'
 shotdir = ''
 toolpicked = ''
@@ -66,9 +68,6 @@ class qt_launcher(ui.main_ui_3_treeWid.Ui_MainWindow,QtWidgets.QMainWindow):
             item = QtWidgets.QTreeWidgetItem(list(shot))
             self.dir_tree_widget.addTopLevelItem(item)
 
-        # for shot, details in shots.items():
-        #     item = QtWidgets.QTreeWidgetItem([details])
-        #     self.dir_tree_widget.addTopLevelItem(item)
 
 
     #populate project dirs
