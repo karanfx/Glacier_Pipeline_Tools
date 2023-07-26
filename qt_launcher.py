@@ -9,10 +9,11 @@ import PySide6.QtWidgets
 
 #Import Utils
 from utils.google_sheet_api import get_status
+from utils.create_project_dirs import makesub_dirs
 
 
 #Import UIs
-import ui.main_ui_3_treeWid
+import ui.main_ui_5
 import ui.create_project_ui
 import ui.add_software_ui
 
@@ -20,11 +21,12 @@ import ui.add_software_ui
 studio_dir = 'D:\Work\houdinifx'
 shotdir = ''
 toolpicked = ''
-tooldir = json.load(open('bin/data/tools_path.json'))
+tooldir = json.load(open('bin/data/softpaths.json'))
 jsonpath = "bin/data/softpaths.json"
+username = "Karan"
 
 
-class qt_launcher(ui.main_ui_3_treeWid.Ui_MainWindow,QtWidgets.QMainWindow):
+class qt_launcher(ui.main_ui_5.Ui_MainWindow,QtWidgets.QMainWindow):
     def __init__(self):
         super(qt_launcher,self).__init__()
         self.setupUi(self)
@@ -42,9 +44,9 @@ class qt_launcher(ui.main_ui_3_treeWid.Ui_MainWindow,QtWidgets.QMainWindow):
         self.action_Add_Apps.triggered.connect(self.addsoft)
         self.action_Exit.triggered.connect(self.close)
         self.actionToggle_Darkmode.triggered.connect(self.toggle_dark)
-        # self.setStyleSheet(qdarkstyle.load_stylesheet())                    #set darkmode
 
-        self.populate_status()
+        # self.populate_status()
+        self.reload_task_PB.clicked.connect(self.reload_task)
 
 
 
@@ -59,18 +61,20 @@ class qt_launcher(ui.main_ui_3_treeWid.Ui_MainWindow,QtWidgets.QMainWindow):
         with open("bin\data\shot_status.json") as f:
             shots = json.load(f)
 
-        # shots =  ["Show01", "Seq_AB", "Shot_AB001", "Fire", "Karan", "Ready to Start", "7/25/2023", "7/31/2023", "Fire on Jungle"]
         for shot in shots:
             # Clean List
             type(shot)
             shot.pop(0)
             shot.pop(0)
-            shot.remove('Karan')
+            shot.remove(username)
 
             print(list(shot))
             item = QtWidgets.QTreeWidgetItem(list(shot))
             self.dir_tree_widget.addTopLevelItem(item)
 
+    def reload_task(self):
+        get_status(username)
+        self.populate_status()
 
 
     #populate project dirs
@@ -125,12 +129,6 @@ class qt_launcher(ui.main_ui_3_treeWid.Ui_MainWindow,QtWidgets.QMainWindow):
         print(str(toolname))
         os.startfile(tooldir[toolname]) 
 
-    # def tree_wid(self):
-    #     self.dir_tree_widget.clear()
-    #     data = {"proj A" : ["file A","file B"],
-    #             "proj B" : ["file A1","file B1"]}
-    #     item = QtWidgets.QTreeWidgetItem(["value"])
-    #     self.dir_tree_widget.insertTopLevelItems(0,item)
 
 #Create Project Dialog 
 class dialog(ui.create_project_ui.Ui_Dialog,QtWidgets.QDialog):
@@ -168,10 +166,13 @@ class dialog(ui.create_project_ui.Ui_Dialog,QtWidgets.QDialog):
         # os.mkdir(prodir)
         #os.mkdir(os.path.join(prodir,seqdir,shotdir))
         mkdir = prodir + '/' +seqdir + '/' + shotdir
+        print(mkdir)
 
-        for sub in shot_subdirs:
-            for dsub in dcc_subdir:
-                os.makedirs(mkdir+'/'+sub+'/'+dsub)
+        # makesub_dirs(shotdir)
+
+        # for sub in shot_subdirs:
+        #     for dsub in dcc_subdir:
+        #         os.makedirs(mkdir+'/'+sub+'/'+dsub)
 
 
 class addsoft(ui.add_software_ui.Ui_Dialog,QtWidgets.QDialog):
@@ -191,29 +192,16 @@ class addsoft(ui.add_software_ui.Ui_Dialog,QtWidgets.QDialog):
     def add_to_json(self):
         softname = self.softname_LE.text()
         softpath = self.softpath_LE.text()
-        #tooldir = json.load(open('tools_path.json'))
-        # Serializing json
         
-        #j_soft = "," + softname + ":" + softpath
-
-        # j_soft = {softname:softpath}
-        # j_soft.update()
-
-        #json_object['key'] =['object'] 
-        #json_object = json.dumps(j_soft, indent=4)  
         with open(jsonpath) as jsonfile:
             j_soft = json.load(jsonfile)
 
         j_soft['key'] = ['object']
+
     # Writing to sample.json
         with open(jsonpath, "a") as outfile:
-            #json_object = json_object + "," + json_object 
             json.dump(j_soft,outfile)
-            #outfile.write(json_object)
-           
-        # tooldir = json.dumps(softname,softpath)
-        #print(json_object)
-
+            
         
 
     

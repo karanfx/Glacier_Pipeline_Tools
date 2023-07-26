@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 
 ################################################################################
-## Form generated from reading UI file 'main_ui_4_treeWid.ui'
+## Form generated from reading UI file 'main_ui_5_treeWid.ui'
 ##
 ## Created by: Qt User Interface Compiler version 6.5.0
 ##
@@ -40,6 +40,8 @@ class Ui_MainWindow(object):
         self.actionAbout.setObjectName(u"actionAbout")
         self.actionToggle_Darkmode = QAction(MainWindow)
         self.actionToggle_Darkmode.setObjectName(u"actionToggle_Darkmode")
+        self.actionReport = QAction(MainWindow)
+        self.actionReport.setObjectName(u"actionReport")
         self.centralwidget = QWidget(MainWindow)
         self.centralwidget.setObjectName(u"centralwidget")
         self.gridLayout = QGridLayout(self.centralwidget)
@@ -148,10 +150,10 @@ class Ui_MainWindow(object):
 
         self.gridLayout_3.addLayout(self.horizontalLayout, 5, 0, 1, 1)
 
-        self.pushButton = QPushButton(self.frame)
-        self.pushButton.setObjectName(u"pushButton")
+        self.reload_task_PB = QPushButton(self.frame)
+        self.reload_task_PB.setObjectName(u"reload_task_PB")
 
-        self.gridLayout_3.addWidget(self.pushButton, 2, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.reload_task_PB, 2, 0, 1, 1)
 
 
         self.gridLayout.addWidget(self.frame, 0, 0, 1, 1)
@@ -171,11 +173,11 @@ class Ui_MainWindow(object):
 
         self.menubar.addAction(self.menuMode.menuAction())
         self.menubar.addAction(self.menuHelp.menuAction())
-        self.menuMode.addAction(self.action_Create_Project)
         self.menuMode.addAction(self.action_Add_Apps)
         self.menuMode.addAction(self.actionToggle_Darkmode)
         self.menuMode.addAction(self.action_Exit)
         self.menuHelp.addAction(self.actionDoc)
+        self.menuHelp.addAction(self.actionReport)
         self.menuHelp.addAction(self.actionAbout)
 
         self.retranslateUi(MainWindow)
@@ -190,7 +192,8 @@ class Ui_MainWindow(object):
         self.action_Add_Apps.setText(QCoreApplication.translate("MainWindow", u"Add Apps", None))
         self.actionDoc.setText(QCoreApplication.translate("MainWindow", u"Doc", None))
         self.actionAbout.setText(QCoreApplication.translate("MainWindow", u"About", None))
-        self.actionToggle_Darkmode.setText(QCoreApplication.translate("MainWindow", u"Toggle Darkmode", None))
+        self.actionToggle_Darkmode.setText(QCoreApplication.translate("MainWindow", u"Darkmode", None))
+        self.actionReport.setText(QCoreApplication.translate("MainWindow", u"Report", None))
         self.project_lB.setText(QCoreApplication.translate("MainWindow", u"Project", None))
         self.launch_button.setText(QCoreApplication.translate("MainWindow", u"Launch", None))
         self.tools_lB.setText(QCoreApplication.translate("MainWindow", u"Tool", None))
@@ -214,7 +217,7 @@ class Ui_MainWindow(object):
         self.User_lB.setText(QCoreApplication.translate("MainWindow", u"Manual path:", None))
         self.manual_toolButton.setText(QCoreApplication.translate("MainWindow", u"...", None))
         self.shot_lB.setText(QCoreApplication.translate("MainWindow", u"Shot :", None))
-        self.pushButton.setText(QCoreApplication.translate("MainWindow", u"Reload", None))
+        self.reload_task_PB.setText(QCoreApplication.translate("MainWindow", u"Reload", None))
         self.menuMode.setTitle(QCoreApplication.translate("MainWindow", u"Menu", None))
         self.menuHelp.setTitle(QCoreApplication.translate("MainWindow", u"Help", None))
     # retranslateUi

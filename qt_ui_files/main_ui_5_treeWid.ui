@@ -204,7 +204,7 @@
         </layout>
        </item>
        <item row="2" column="0">
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="reload_task_PB">
          <property name="text">
           <string>Reload</string>
          </property>
@@ -228,7 +228,6 @@
     <property name="title">
      <string>Menu</string>
     </property>
-    <addaction name="action_Create_Project"/>
     <addaction name="action_Add_Apps"/>
     <addaction name="actionToggle_Darkmode"/>
     <addaction name="action_Exit"/>
@@ -238,6 +237,7 @@
      <string>Help</string>
     </property>
     <addaction name="actionDoc"/>
+    <addaction name="actionReport"/>
     <addaction name="actionAbout"/>
    </widget>
    <addaction name="menuMode"/>
@@ -271,7 +271,12 @@
   </action>
   <action name="actionToggle_Darkmode">
    <property name="text">
-    <string>Toggle Darkmode</string>
+    <string>Darkmode</string>
+   </property>
+  </action>
+  <action name="actionReport">
+   <property name="text">
+    <string>Report</string>
    </property>
   </action>
  </widget>
