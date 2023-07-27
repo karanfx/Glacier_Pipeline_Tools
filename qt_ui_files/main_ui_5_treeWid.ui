@@ -28,13 +28,20 @@
       </property>
       <layout class="QGridLayout" name="gridLayout_3">
        <item row="8" column="0">
-        <widget class="Line" name="line">
-         <property name="orientation">
-          <enum>Qt::Horizontal</enum>
-         </property>
-        </widget>
+        <layout class="QHBoxLayout" name="horizontalLayout">
+         <item>
+          <widget class="QLabel" name="shot_lB">
+           <property name="text">
+            <string>Shot :</string>
+           </property>
+          </widget>
+         </item>
+         <item>
+          <widget class="QComboBox" name="shot_cB"/>
+         </item>
+        </layout>
        </item>
-       <item row="4" column="0">
+       <item row="7" column="0">
         <layout class="QGridLayout" name="gridLayout_2">
          <item row="0" column="0">
           <widget class="QLabel" name="project_lB">
@@ -48,21 +55,28 @@
          </item>
         </layout>
        </item>
-       <item row="0" column="0">
+       <item row="5" column="0">
+        <widget class="QPushButton" name="reload_task_PB">
+         <property name="text">
+          <string>Reload Tasks</string>
+         </property>
+        </widget>
+       </item>
+       <item row="11" column="0">
+        <widget class="Line" name="line">
+         <property name="orientation">
+          <enum>Qt::Horizontal</enum>
+         </property>
+        </widget>
+       </item>
+       <item row="1" column="0">
         <widget class="Line" name="line_3">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
          </property>
         </widget>
        </item>
-       <item row="10" column="0">
-        <widget class="QPushButton" name="launch_button">
-         <property name="text">
-          <string>Launch</string>
-         </property>
-        </widget>
-       </item>
-       <item row="3" column="0">
+       <item row="6" column="0">
         <widget class="Line" name="line_2">
          <property name="orientation">
           <enum>Qt::Horizontal</enum>
@@ -70,20 +84,34 @@
         </widget>
        </item>
        <item row="9" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_4">
+        <layout class="QHBoxLayout" name="horizontalLayout_2">
          <item>
-          <widget class="QLabel" name="tools_lB">
+          <widget class="QLabel" name="User_lB">
            <property name="text">
-            <string>Tool</string>
+            <string>Manual path:</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QComboBox" name="tools_cB"/>
+          <widget class="QLineEdit" name="manual_path_Ldit"/>
+         </item>
+         <item>
+          <widget class="QToolButton" name="manual_toolButton">
+           <property name="text">
+            <string>...</string>
+           </property>
+          </widget>
          </item>
         </layout>
        </item>
-       <item row="1" column="0">
+       <item row="13" column="0">
+        <widget class="QPushButton" name="launch_button">
+         <property name="text">
+          <string>Launch</string>
+         </property>
+        </widget>
+       </item>
+       <item row="4" column="0">
         <widget class="QTreeWidget" name="dir_tree_widget">
          <column>
           <property name="text">
@@ -122,91 +150,37 @@
          </column>
          <item>
           <property name="text">
-           <string>New Item</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-         </item>
-         <item>
-          <property name="text">
-           <string>New Item</string>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="text">
-           <string/>
-          </property>
-          <property name="text">
-           <string/>
+           <string>Reload Tasks</string>
           </property>
          </item>
         </widget>
        </item>
-       <item row="6" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout_2">
+       <item row="12" column="0">
+        <layout class="QHBoxLayout" name="horizontalLayout_4">
          <item>
-          <widget class="QLabel" name="User_lB">
+          <widget class="QLabel" name="tools_lB">
            <property name="text">
-            <string>Manual path:</string>
+            <string>Tool</string>
            </property>
           </widget>
          </item>
          <item>
-          <widget class="QLineEdit" name="manual_path_Ldit"/>
-         </item>
-         <item>
-          <widget class="QToolButton" name="manual_toolButton">
-           <property name="text">
-            <string>...</string>
-           </property>
-          </widget>
+          <widget class="QComboBox" name="tools_cB"/>
          </item>
         </layout>
        </item>
-       <item row="5" column="0">
-        <layout class="QHBoxLayout" name="horizontalLayout">
-         <item>
-          <widget class="QLabel" name="shot_lB">
-           <property name="text">
-            <string>Shot :</string>
-           </property>
-          </widget>
-         </item>
-         <item>
-          <widget class="QComboBox" name="shot_cB"/>
-         </item>
-        </layout>
-       </item>
-       <item row="2" column="0">
-        <widget class="QPushButton" name="reload_task_PB">
+       <item row="0" column="0">
+        <widget class="QLabel" name="logo_LB">
+         <property name="font">
+          <font>
+           <family>Cambria</family>
+           <pointsize>20</pointsize>
+           <weight>75</weight>
+           <bold>true</bold>
+          </font>
+         </property>
          <property name="text">
-          <string>Reload</string>
+          <string>Glacier</string>
          </property>
         </widget>
        </item>
@@ -229,6 +203,7 @@
      <string>Menu</string>
     </property>
     <addaction name="action_Add_Apps"/>
+    <addaction name="action_Create_Project_2"/>
     <addaction name="actionToggle_Darkmode"/>
     <addaction name="action_Exit"/>
    </widget>
@@ -277,6 +252,11 @@
   <action name="actionReport">
    <property name="text">
     <string>Report</string>
+   </property>
+  </action>
+  <action name="action_Create_Project_2">
+   <property name="text">
+    <string>Create_Project</string>
    </property>
   </action>
  </widget>

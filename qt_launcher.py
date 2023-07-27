@@ -4,6 +4,7 @@ import os
 import json
 import qdarkstyle
 
+import PySide6.QtGui
 import PySide6.QtCore
 import PySide6.QtWidgets
 
@@ -16,9 +17,11 @@ from utils.create_project_dirs import makesub_dirs
 import ui.main_ui_5
 import ui.create_project_ui
 import ui.add_software_ui
+import ui.about_page
+import ui.report_form
 
 #required data paths to refer
-studio_dir = 'D:\Work\houdinifx'
+studio_dir = 'D:\Work\houdinifx\pipe_test'
 shotdir = ''
 toolpicked = ''
 tooldir = json.load(open('bin/data/softpaths.json'))
@@ -30,22 +33,32 @@ class qt_launcher(ui.main_ui_5.Ui_MainWindow,QtWidgets.QMainWindow):
     def __init__(self):
         super(qt_launcher,self).__init__()
         self.setupUi(self)
-        self.setWindowTitle("App Launcher - Build 1.3.0")
+        self.setWindowTitle("Glacier App Launcher - Build 1.5.0")
+        self.setWindowIcon(PySide6.QtGui.QIcon("bin/logo/favicon_sq_small.png"))
+        
+        self.logo_LB.setStyleSheet("background-image :url(bin/logo/logo_title_cropped.png);")
         
         self.toolssetup()
         self.populate_project()
-        #self.populate_shot()
+        self.populate_shot()
         self.project_cB.currentTextChanged.connect(self.populate_shot)
-        self.shot_cB.currentTextChanged.connect(self.populate_subdir)
+        # self.shot_cB.currentTextChanged.connect(self.populate_subdir)
         self.launch_button.clicked.connect(self.opentool)
         self.manual_toolButton.clicked.connect(self.manual_dir)
 
-        self.action_Create_Project.triggered.connect(self.create_project)
+        self.action_Create_Project_2.triggered.connect(self.create_project)
         self.action_Add_Apps.triggered.connect(self.addsoft)
         self.action_Exit.triggered.connect(self.close)
         self.actionToggle_Darkmode.triggered.connect(self.toggle_dark)
 
-        # self.populate_status()
+        #About Page
+        self.actionAbout.triggered.connect(self.about_page)
+
+        #Report Form
+        self.actionReport.triggered.connect(self.report)
+
+        #Load Tasks From Google Sheets API
+        self.populate_status()
         self.reload_task_PB.clicked.connect(self.reload_task)
 
 
@@ -53,7 +66,7 @@ class qt_launcher(ui.main_ui_5.Ui_MainWindow,QtWidgets.QMainWindow):
     def toggle_dark(self):
         self.setStyleSheet(qdarkstyle.load_stylesheet())
 
-
+    #Get Data from Sheet
     def populate_status(self):
         self.dir_tree_widget.clear()
         self.dir_tree_widget.setAlternatingRowColors(True)
@@ -61,14 +74,16 @@ class qt_launcher(ui.main_ui_5.Ui_MainWindow,QtWidgets.QMainWindow):
         with open("bin\data\shot_status.json") as f:
             shots = json.load(f)
 
+        shots = shots[1:]
         for shot in shots:
             # Clean List
-            type(shot)
-            shot.pop(0)
-            shot.pop(0)
+            # shot = shot[2:]
+            shot.pop(1)
             shot.remove(username)
+            shot.insert(6,shot[0])
+            shot = shot[1:]
 
-            print(list(shot))
+            # print(list(shot))
             item = QtWidgets.QTreeWidgetItem(list(shot))
             self.dir_tree_widget.addTopLevelItem(item)
 
@@ -91,16 +106,16 @@ class qt_launcher(ui.main_ui_5.Ui_MainWindow,QtWidgets.QMainWindow):
             self.shot_cB.addItems(shotdirs)
         #def select_tools():
     
-    def populate_subdir(self):
-        sel_pro = self.project_cB.currentText()
-        subdir = self.shot_cB.currentText()
-        if subdir:
-            subdirs = studio_dir + '\\' + sel_pro+'\\'+ subdir
-            subdirs = [ name for name in os.listdir(subdirs) if os.path.isdir(os.path.join(subdirs, name)) ]
-            self.subdir_cB.addItems(subdirs)
+    # def populate_subdir(self):
+    #     sel_pro = self.project_cB.currentText()
+    #     subdir = self.shot_cB.currentText()
+    #     if subdir:
+    #         subdirs = studio_dir + '\\' + sel_pro+'\\'+ subdir
+    #         subdirs = [ name for name in os.listdir(subdirs) if os.path.isdir(os.path.join(subdirs, name)) ]
+    #         self.subdir_cB.addItems(subdirs)
 
-        cur_subdir = self.subdir_cB.currentText()
-        self.manual_path_Ldit.setText(os.path.join(studio_dir,sel_pro,subdir,cur_subdir))
+    #     cur_subdir = self.subdir_cB.currentText()
+    #     self.manual_path_Ldit.setText(os.path.join(studio_dir,sel_pro,subdir,cur_subdir))
 
 
     def manual_dir(self):
@@ -111,15 +126,26 @@ class qt_launcher(ui.main_ui_5.Ui_MainWindow,QtWidgets.QMainWindow):
         if not man_path:
             QtWidgets.QMessageBox.about(self,"path Required","Please, pick the path")
 
+    #Calling Create Project UI
     def create_project(self):
         
         dlg = dialog()
         dlg.exec()
 
+    #Calling Add Software UI
     def addsoft(self):
         dlg = addsoft()
         dlg.exec()
 
+    #Calling About Page
+    def about_page(self):
+        dlg = about_page()
+        dlg.exec()
+
+    #Calling Report Form
+    def report(self):
+        dlg = report_form()
+        dlg.exec()
 
     def toolssetup(self):
         self.tools_cB.addItems(tooldir)
@@ -135,12 +161,15 @@ class dialog(ui.create_project_ui.Ui_Dialog,QtWidgets.QDialog):
     def __init__(self):
         super(dialog,self).__init__()
         self.setupUi(self)
-        self.setWindowTitle("App Launcher - Create Project")
+        self.setWindowTitle("Glacier App Launcher - Create Project")
+        self.setWindowIcon(PySide6.QtGui.QIcon("bin/logo/favicon_sq_small.png"))
+        self.setStyleSheet(qdarkstyle.load_stylesheet())                    #set darkmode
+
         self.Project_TB.clicked.connect(self.manual_dir)
         self.Seq_TB.clicked.connect(self.manual_dir)
         self.Shot_TB.clicked.connect(self.manual_dir)
         self.create_buttons.accepted.connect(self.create_pro_dirs)
-        self.setStyleSheet(qdarkstyle.load_stylesheet())                    #set darkmode
+        
         
 
     def manual_dir(self):
@@ -168,21 +197,19 @@ class dialog(ui.create_project_ui.Ui_Dialog,QtWidgets.QDialog):
         mkdir = prodir + '/' +seqdir + '/' + shotdir
         print(mkdir)
 
-        # makesub_dirs(shotdir)
-
-        # for sub in shot_subdirs:
-        #     for dsub in dcc_subdir:
-        #         os.makedirs(mkdir+'/'+sub+'/'+dsub)
-
-
+#Add software Directories one time thing
 class addsoft(ui.add_software_ui.Ui_Dialog,QtWidgets.QDialog):
     def __init__(self):
         super(addsoft,self).__init__()
         self.setupUi(self)
         self.setWindowTitle("Add Software")
+        self.setWindowIcon(PySide6.QtGui.QIcon("bin/logo/favicon_sq_small.png"))
+        self.setStyleSheet(qdarkstyle.load_stylesheet())                    #set darkmode
+
+
         self.softpath_TB.clicked.connect(self.getsoft)
         self.reg_buttonBox.accepted.connect(self.add_to_json)
-        self.setStyleSheet(qdarkstyle.load_stylesheet())                    #set darkmode
+       
 
     def getsoft(self):
         softpath,ext = QtWidgets.QFileDialog.getOpenFileName(self,'Select Folder')
@@ -203,8 +230,23 @@ class addsoft(ui.add_software_ui.Ui_Dialog,QtWidgets.QDialog):
             json.dump(j_soft,outfile)
             
         
-
+#About Page
+class about_page(ui.about_page.Ui_Dialog,QtWidgets.QDialog):
+    def __init__(self):
+        super(about_page,self).__init__()
+        self.setupUi(self)
+        self.setWindowTitle("About")
+        self.setWindowIcon(PySide6.QtGui.QIcon("bin/logo/favicon_sq_small.png"))
+        self.setStyleSheet(qdarkstyle.load_stylesheet())                    #set darkmode
     
+#Email Form
+class report_form(ui.report_form.Ui_Form,QtWidgets.QDialog):
+    def __init__(self):
+        super(report_form,self).__init__()
+        self.setupUi(self)
+        self.setWindowTitle("Report")
+        self.setWindowIcon(PySide6.QtGui.QIcon("bin/logo/favicon_sq_small.png"))
+        self.setStyleSheet(qdarkstyle.load_stylesheet())   
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication()

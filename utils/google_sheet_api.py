@@ -16,7 +16,7 @@ def get_status(username):
     index = user_col.index('Artist') +1
     user_col = sheet.col_values(index)
     #Get Artist Data from Sheets
-    data =[]
+    data =[sheet.row_values(1)]
     for i,name in enumerate(user_col):
         i = i+1
         if name == username:
