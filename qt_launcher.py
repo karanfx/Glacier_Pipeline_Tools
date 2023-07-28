@@ -10,7 +10,7 @@ import PySide6.QtWidgets
 
 #Import Utils
 from utils.google_sheet_api import get_status
-from utils.create_project_dirs import makesub_dirs
+from utils.create_project_dirs import create_shot_dirs
 
 
 #Import UIs
@@ -36,7 +36,13 @@ class qt_launcher(ui.main_ui_5.Ui_MainWindow,QtWidgets.QMainWindow):
         self.setWindowTitle("Glacier App Launcher - Build 1.5.0")
         self.setWindowIcon(PySide6.QtGui.QIcon("bin/logo/favicon_sq_small.png"))
         
-        self.logo_LB.setStyleSheet("background-image :url(bin/logo/logo_title_cropped.png);")
+        # #Add logo Image
+        # self.logo_LB.setStyleSheet("background-image :url(bin/logo/logo_title_cropped.png);")
+        # pxmap = PySide6.QtGui.QPixmap('bin/logo/logo_title_cropped.png')
+        # self.logo_LB.setPixmap(pxmap)
+        # self.logo_LB.setScaledContents(True)
+        # self.logo_LB.resize(50,10)
+    
         
         self.toolssetup()
         self.populate_project()
@@ -61,8 +67,11 @@ class qt_launcher(ui.main_ui_5.Ui_MainWindow,QtWidgets.QMainWindow):
         self.populate_status()
         self.reload_task_PB.clicked.connect(self.reload_task)
 
+        self.dir_tree_widget.itemSelectionChanged.connect(self.get_tree_sel)
+        # QtWidgets.QTreeWidgetItem.
 
 
+    #Toggle Dark Mode
     def toggle_dark(self):
         self.setStyleSheet(qdarkstyle.load_stylesheet())
 
@@ -72,26 +81,52 @@ class qt_launcher(ui.main_ui_5.Ui_MainWindow,QtWidgets.QMainWindow):
         self.dir_tree_widget.setAlternatingRowColors(True)
         
         with open("bin\data\shot_status.json") as f:
-            shots = json.load(f)
+            data = json.load(f)
+        # print(data)
 
-        shots = shots[1:]
-        for shot in shots:
+        #Get Proper Indexes 
+        # show_idx = data[0].index('Show')
+        # seq_idx = data[0].index('Sequence')
+        # shot_idx = data[0].index('Shot')
+        # print(show_idx,seq_idx,shot_idx)
+
+        data = data[1:]
+        for task in data:
             # Clean List
-            # shot = shot[2:]
-            shot.pop(1)
-            shot.remove(username)
-            shot.insert(6,shot[0])
-            shot = shot[1:]
+            
+            task.pop(1)
+            task.remove(username)
+            task.insert(6,task[0])
+            task = task[1:]
 
             # print(list(shot))
-            item = QtWidgets.QTreeWidgetItem(list(shot))
+            item = QtWidgets.QTreeWidgetItem(list(task))
             self.dir_tree_widget.addTopLevelItem(item)
+
+            #Create Dirs
+            create_shot_dirs(studio_dir)
+
+    #Get Selected Task
+    def get_tree_sel(self):
+        #Get Selection
+        sel_task = self.dir_tree_widget.selectedItems()
+        curr_show = [item.text(5) for item in sel_task]
+        curr_show = str(curr_show[0])
+        curr_shot = [item.text(0) for item in sel_task]
+        curr_shot = str(curr_shot[0])
+        current_dir = os.path.join(studio_dir,curr_show,curr_shot)
+
+        #Set selected to manual path
+        self.manual_path_Ldit.setText(current_dir)
+        self.project_cB.setCurrentText(curr_show)
+        # self.shot_cB.setCurrentText(curr_shot)
+        # print(curr_show,curr_shot)
 
     def reload_task(self):
         get_status(username)
         self.populate_status()
 
-
+    
     #populate project dirs
     def populate_project(self):
         prodirs = [ name for name in os.listdir(studio_dir) if os.path.isdir(os.path.join(studio_dir, name)) ]
@@ -104,6 +139,7 @@ class qt_launcher(ui.main_ui_5.Ui_MainWindow,QtWidgets.QMainWindow):
             shotdirs = studio_dir + '\\' + sel_pro
             shotdirs = [ name for name in os.listdir(shotdirs) if os.path.isdir(os.path.join(shotdirs, name)) ]
             self.shot_cB.addItems(shotdirs)
+        self.manual_path_Ldit.setText(os.path.join(studio_dir,sel_pro))
         #def select_tools():
     
     # def populate_subdir(self):
@@ -193,7 +229,7 @@ class dialog(ui.create_project_ui.Ui_Dialog,QtWidgets.QDialog):
 
         prodir.replace('\\','/')
         # os.mkdir(prodir)
-        #os.mkdir(os.path.join(prodir,seqdir,shotdir))
+        os.mkdir(os.path.join(prodir,seqdir,shotdir))
         mkdir = prodir + '/' +seqdir + '/' + shotdir
         print(mkdir)
 
