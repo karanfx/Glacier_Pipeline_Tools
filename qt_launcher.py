@@ -20,13 +20,22 @@ import ui.add_software_ui
 import ui.about_page
 import ui.report_form
 
+#Import userID and tool dirs
+user_json_path = "bin/data/user.json"
+with open(user_json_path,"r") as uf:
+    user_json = json.load(uf)
+userdata = user_json.get('User_Data')
+
+username = userdata.get('user')
+studio_dir = userdata.get('studiodir')
+
+tooldata = user_json.get('tools')
+
+
 #required data paths to refer
-studio_dir = 'D:\Work\houdinifx\pipe_test'
-shotdir = ''
-toolpicked = ''
-tooldir = json.load(open('bin/data/softpaths.json'))
-jsonpath = "bin/data/softpaths.json"
-username = "Karan"
+# tooldir = json.load(open('bin/data/softpaths.json'))
+# jsonpath = "bin/data/softpaths.json"
+# username = "Karan"
 
 
 class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
@@ -121,12 +130,13 @@ class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
         sel_task = self.dir_tree_widget.selectedItems()
         curr_show = [item.text(6) for item in sel_task]
         curr_show = str(curr_show[0])
+
         curr_seq = [item.text(1) for item in sel_task]
-        # print(curr_seq)
         curr_seq = str(curr_seq[0])
+
         curr_shot = [item.text(0) for item in sel_task]
-        # print(curr_shot)
         curr_shot = str(curr_shot[0])
+
         current_dir = os.path.join(studio_dir,curr_show,curr_seq,curr_shot)
 
         #Set selected to manual path
@@ -197,16 +207,19 @@ class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
 
     #Calling Report Form
     def report(self):
-        dlg = report_form()
+        import utils.report_emailer as report
+        dlg = report.report_form()
+        # dlg.setStyleSheet(qdarkstyle.load_stylesheet(qt_api = 'PySide6'))
+        
         dlg.exec()
 
     def toolssetup(self):
-        self.tools_cB.addItems(tooldir)
+        self.tools_cB.addItems(tooldata)
     
     def opentool(self):
         toolname = self.tools_cB.currentText()
-        print(str(toolname))
-        os.startfile(tooldir[toolname]) 
+        # print(str(toolname))
+        os.startfile(tooldata[toolname]) 
 
         
 #About Page
@@ -220,14 +233,7 @@ class about_page(ui.about_page.Ui_Dialog,QtWidgets.QDialog):
         #set darkmode
         self.setStyleSheet(qdarkstyle.load_stylesheet())                    
     
-#Email Form
-class report_form(ui.report_form.Ui_Form,QtWidgets.QDialog):
-    def __init__(self):
-        super(report_form,self).__init__()
-        self.setupUi(self)
-        self.setWindowTitle("Report")
-        self.setWindowIcon(PySide6.QtGui.QIcon("bin/logo/favicon_sq_small.png"))
-        self.setStyleSheet(qdarkstyle.load_stylesheet())   
+
 
 if __name__ == '__main__':
     app = QtWidgets.QApplication()

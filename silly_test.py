@@ -33,14 +33,39 @@ dir = "bin/data/user.json"
 # par_dir = os.path.dirname(par_dir) 
 # print(par_dir)
 
-current_file_path = os.path.abspath(__file__)
-pro_dir = os.path.dirname(current_file_path)
-# pro_dir = os.path.dirname(pro_dir)
-json_path = os.path.join(pro_dir,dir)
-print(json_path)
-print(pro_dir)
+# current_file_path = os.path.abspath(__file__)
+# pro_dir = os.path.dirname(current_file_path)
+# # pro_dir = os.path.dirname(pro_dir)
+# json_path = os.path.join(pro_dir,dir)
+# print(json_path)
+# print(pro_dir)
 
-current_directory = "D:/Work/houdinifx/pipe_test"
-folders_in_current_directory = [item for item in os.listdir(current_directory) if os.path.isdir(os.path.join(current_directory, item))]
-# return folders_in_current_directory
-print(folders_in_current_directory)
+# current_directory = "D:/Work/houdinifx/pipe_test"
+# folders_in_current_directory = [item for item in os.listdir(current_directory) if os.path.isdir(os.path.join(current_directory, item))]
+# # return folders_in_current_directory
+# print(folders_in_current_directory)
+
+
+import json
+# #Import userID and tool dirs
+# user_json_path = "bin/data/user.json"
+# with open(user_json_path,"r") as uf:
+#     user_json = json.load(uf)
+# username = user_json.get('User_Data')
+# username = username.get('user')
+# print(username)
+
+tooldir = json.load(open('bin/data/softpaths.json'))
+print(tooldir)
+
+#Import userID and tool dirs
+user_json_path = "bin/data/user.json"
+with open(user_json_path,"r") as uf:
+    user_json = json.load(uf)
+userdata = user_json.get('User_Data')
+
+username = userdata.get('user')
+studio_dir = userdata.get('studiodir')
+
+tooldata = user_json.get('tools')
+print(tooldata)
