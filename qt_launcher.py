@@ -14,7 +14,7 @@ from utils.create_project_dirs import create_shot_dirs
 
 
 #Import UIs
-import ui.main_ui_5
+import ui.main_ui_6
 import ui.create_project_ui
 import ui.add_software_ui
 import ui.about_page
@@ -29,7 +29,7 @@ jsonpath = "bin/data/softpaths.json"
 username = "Karan"
 
 
-class qt_launcher(ui.main_ui_5.Ui_MainWindow,QtWidgets.QMainWindow):
+class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
     def __init__(self):
         super(qt_launcher,self).__init__()
         self.setupUi(self)
@@ -46,14 +46,18 @@ class qt_launcher(ui.main_ui_5.Ui_MainWindow,QtWidgets.QMainWindow):
         
         self.toolssetup()
         self.populate_project()
+        self.populate_seq()
         self.populate_shot()
-        self.project_cB.currentTextChanged.connect(self.populate_shot)
-        # self.shot_cB.currentTextChanged.connect(self.populate_subdir)
+        
+        self.project_cB.currentTextChanged.connect(self.populate_seq)
+        self.seq_cB.currentTextChanged.connect(self.populate_shot)
+        
         self.launch_button.clicked.connect(self.opentool)
         self.manual_toolButton.clicked.connect(self.manual_dir)
 
+        #Set Action Menu
         self.action_Create_Project_2.triggered.connect(self.create_project)
-        self.action_Add_Apps.triggered.connect(self.addsoft)
+        self.action_setup_dirs.triggered.connect(self.setup_dirs)
         self.action_Exit.triggered.connect(self.close)
         self.actionToggle_Darkmode.triggered.connect(self.toggle_dark)
 
@@ -73,7 +77,7 @@ class qt_launcher(ui.main_ui_5.Ui_MainWindow,QtWidgets.QMainWindow):
 
     #Toggle Dark Mode
     def toggle_dark(self):
-        self.setStyleSheet(qdarkstyle.load_stylesheet())
+        self.setStyleSheet(qdarkstyle.load_stylesheet(qt_api = 'PySide6'))
 
     #Get Data from Sheet
     def populate_status(self):
@@ -85,19 +89,23 @@ class qt_launcher(ui.main_ui_5.Ui_MainWindow,QtWidgets.QMainWindow):
         # print(data)
 
         #Get Proper Indexes 
-        # show_idx = data[0].index('Show')
-        # seq_idx = data[0].index('Sequence')
-        # shot_idx = data[0].index('Shot')
-        # print(show_idx,seq_idx,shot_idx)
+        show_idx = data[0].index('Show')
+        seq_idx = data[0].index('Sequence')
+        shot_idx = data[0].index('Shot')
+        print(show_idx,seq_idx,shot_idx)
 
         data = data[1:]
         for task in data:
             # Clean List
-            
-            task.pop(1)
             task.remove(username)
-            task.insert(6,task[0])
+            task.insert(7,task[show_idx])
+            
+            # task.insert(1,task[seq_idx])
+            task.insert(1,task[shot_idx])
+            task.pop(3)
+            
             task = task[1:]
+            
 
             # print(list(shot))
             item = QtWidgets.QTreeWidgetItem(list(task))
@@ -110,16 +118,21 @@ class qt_launcher(ui.main_ui_5.Ui_MainWindow,QtWidgets.QMainWindow):
     def get_tree_sel(self):
         #Get Selection
         sel_task = self.dir_tree_widget.selectedItems()
-        curr_show = [item.text(5) for item in sel_task]
+        curr_show = [item.text(6) for item in sel_task]
         curr_show = str(curr_show[0])
+        curr_seq = [item.text(1) for item in sel_task]
+        # print(curr_seq)
+        curr_seq = str(curr_seq[0])
         curr_shot = [item.text(0) for item in sel_task]
+        # print(curr_shot)
         curr_shot = str(curr_shot[0])
-        current_dir = os.path.join(studio_dir,curr_show,curr_shot)
+        current_dir = os.path.join(studio_dir,curr_show,curr_seq,curr_shot)
 
         #Set selected to manual path
         self.manual_path_Ldit.setText(current_dir)
         self.project_cB.setCurrentText(curr_show)
-        # self.shot_cB.setCurrentText(curr_shot)
+        self.seq_cB.setCurrentText(curr_seq)
+        self.shot_cB.setCurrentText(curr_shot)
         # print(curr_show,curr_shot)
 
     def reload_task(self):
@@ -132,26 +145,30 @@ class qt_launcher(ui.main_ui_5.Ui_MainWindow,QtWidgets.QMainWindow):
         prodirs = [ name for name in os.listdir(studio_dir) if os.path.isdir(os.path.join(studio_dir, name)) ]
         self.project_cB.addItems(prodirs)
 
+    def populate_seq(self):
+        self.seq_cB.clear()
+
+        sel_pro = self.project_cB.currentText()
+        sel_pro = os.path.join(studio_dir,sel_pro)
+        seq_list = [item for item in os.listdir(sel_pro) if os.path.isdir(os.path.join(sel_pro, item))]
+        self.seq_cB.addItems(seq_list)
+        
     
     def populate_shot(self):
-        sel_pro = self.project_cB.currentText()
-        if sel_pro:
-            shotdirs = studio_dir + '\\' + sel_pro
-            shotdirs = [ name for name in os.listdir(shotdirs) if os.path.isdir(os.path.join(shotdirs, name)) ]
-            self.shot_cB.addItems(shotdirs)
-        self.manual_path_Ldit.setText(os.path.join(studio_dir,sel_pro))
-        #def select_tools():
-    
-    # def populate_subdir(self):
-    #     sel_pro = self.project_cB.currentText()
-    #     subdir = self.shot_cB.currentText()
-    #     if subdir:
-    #         subdirs = studio_dir + '\\' + sel_pro+'\\'+ subdir
-    #         subdirs = [ name for name in os.listdir(subdirs) if os.path.isdir(os.path.join(subdirs, name)) ]
-    #         self.subdir_cB.addItems(subdirs)
+        self.shot_cB.clear()
+        
+        sel_show = self.project_cB.currentText()
+        sel_seq = self.seq_cB.currentText()
+        sel_pro = os.path.join(studio_dir,sel_show,sel_seq)
+        shot_list = [item for item in os.listdir(sel_pro) if os.path.isdir(os.path.join(sel_pro, item))]
 
-    #     cur_subdir = self.subdir_cB.currentText()
-    #     self.manual_path_Ldit.setText(os.path.join(studio_dir,sel_pro,subdir,cur_subdir))
+        self.shot_cB.addItems(shot_list)
+        
+
+        # self.manual_path_Ldit.setText(os.path.join(studio_dir,sel_pro))
+        #def select_tools():
+
+
 
 
     def manual_dir(self):
@@ -169,8 +186,10 @@ class qt_launcher(ui.main_ui_5.Ui_MainWindow,QtWidgets.QMainWindow):
         dlg.exec()
 
     #Calling Add Software UI
-    def addsoft(self):
-        dlg = addsoft()
+    def setup_dirs(self):
+        
+        import utils.setup_dirs
+        dlg = utils.setup_dirs.setup_dailog()
         dlg.exec()
 
     #Calling About Page
@@ -199,7 +218,7 @@ class dialog(ui.create_project_ui.Ui_Dialog,QtWidgets.QDialog):
         self.setupUi(self)
         self.setWindowTitle("Glacier App Launcher - Create Project")
         self.setWindowIcon(PySide6.QtGui.QIcon("bin/logo/favicon_sq_small.png"))
-        self.setStyleSheet(qdarkstyle.load_stylesheet())                    #set darkmode
+        self.setStyleSheet(qdarkstyle.load_stylesheet(qt_api = 'PySide6'))                    #set darkmode
 
         self.Project_TB.clicked.connect(self.manual_dir)
         self.Seq_TB.clicked.connect(self.manual_dir)
@@ -210,7 +229,7 @@ class dialog(ui.create_project_ui.Ui_Dialog,QtWidgets.QDialog):
 
     def manual_dir(self):
         man_path = QtWidgets.QFileDialog.getExistingDirectory(self,'Select Folder')
-        #QtWidgets.QFileDialog.getExistingDirectory
+        
         if man_path:
             self.project_LE.setText(man_path)
             # self.Seq_LE.setText(man_path)
@@ -240,7 +259,7 @@ class addsoft(ui.add_software_ui.Ui_Dialog,QtWidgets.QDialog):
         self.setupUi(self)
         self.setWindowTitle("Add Software")
         self.setWindowIcon(PySide6.QtGui.QIcon("bin/logo/favicon_sq_small.png"))
-        self.setStyleSheet(qdarkstyle.load_stylesheet())                    #set darkmode
+        self.setStyleSheet(qdarkstyle.load_stylesheet(qt_api = 'PySide6'))                    #set darkmode
 
 
         self.softpath_TB.clicked.connect(self.getsoft)
@@ -273,7 +292,9 @@ class about_page(ui.about_page.Ui_Dialog,QtWidgets.QDialog):
         self.setupUi(self)
         self.setWindowTitle("About")
         self.setWindowIcon(PySide6.QtGui.QIcon("bin/logo/favicon_sq_small.png"))
-        self.setStyleSheet(qdarkstyle.load_stylesheet())                    #set darkmode
+
+        #set darkmode
+        self.setStyleSheet(qdarkstyle.load_stylesheet())                    
     
 #Email Form
 class report_form(ui.report_form.Ui_Form,QtWidgets.QDialog):

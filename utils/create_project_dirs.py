@@ -35,6 +35,6 @@ def create_shot_dirs(studiodir):
                 path = os.path.join(shotdir,k,dir)
                 if not os.path.isdir(path):
                     os.makedirs(path)
-                print(path)
+                # print(path)
 
 # makesub_dirs(shotdir)

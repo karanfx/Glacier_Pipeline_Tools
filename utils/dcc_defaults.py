@@ -6,6 +6,15 @@ import sys
 
 tooldir = json.load(open('bin/data/softpaths.json'))
 
+# To DO:
+# Setup Default scene -almost done
+# Load custom tools
+# Setup project directories
+# Setup Frame Range
+# Auto-Load Assets
+
+
+
 def houdini_def():
     # path = tooldir['Houdini']
     file_path = "C:/Program Files/Side Effects Software/Houdini 18.5.596/houdini/scripts/123.py"
