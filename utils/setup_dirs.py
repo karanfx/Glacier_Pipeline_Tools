@@ -35,7 +35,7 @@ class setup_dailog(ui.setup_dirs_ui.Ui_Dialog,QtWidgets.QDialog):
         unrealDir = self.unreal_dir_LE.text()
         discordDir = self.discord_dir_LE.text()
 
-        tool_dirs = {'houdini':houdiniDir,'Maya':mayaDir,'Nuke':nukeDir,'Unreal':unrealDir,'Discord':discordDir}
+        tool_dirs = {'Houdini':houdiniDir,'Maya':mayaDir,'Nuke':nukeDir,'Unreal':unrealDir,'Discord':discordDir}
 
         data = {'User_Data' : userdata,'tools':tool_dirs}
 

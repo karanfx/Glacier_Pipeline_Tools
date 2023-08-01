@@ -78,6 +78,7 @@ class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
     #Toggle Dark Mode
     def toggle_dark(self):
         self.setStyleSheet(qdarkstyle.load_stylesheet(qt_api = 'PySide6'))
+        
 
     #Get Data from Sheet
     def populate_status(self):
@@ -92,7 +93,7 @@ class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
         show_idx = data[0].index('Show')
         seq_idx = data[0].index('Sequence')
         shot_idx = data[0].index('Shot')
-        print(show_idx,seq_idx,shot_idx)
+        # print(show_idx,seq_idx,shot_idx)
 
         data = data[1:]
         for task in data:
@@ -106,13 +107,13 @@ class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
             
             task = task[1:]
             
-
             # print(list(shot))
             item = QtWidgets.QTreeWidgetItem(list(task))
             self.dir_tree_widget.addTopLevelItem(item)
 
             #Create Dirs
             create_shot_dirs(studio_dir)
+
 
     #Get Selected Task
     def get_tree_sel(self):
@@ -156,7 +157,7 @@ class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
     
     def populate_shot(self):
         self.shot_cB.clear()
-        
+
         sel_show = self.project_cB.currentText()
         sel_seq = self.seq_cB.currentText()
         sel_pro = os.path.join(studio_dir,sel_show,sel_seq)
@@ -168,9 +169,6 @@ class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
         # self.manual_path_Ldit.setText(os.path.join(studio_dir,sel_pro))
         #def select_tools():
 
-
-
-
     def manual_dir(self):
         man_path,ext = QtWidgets.QFileDialog.getOpenFileName(self,'Select Folder')
         if man_path:
@@ -181,8 +179,8 @@ class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
 
     #Calling Create Project UI
     def create_project(self):
-        
-        dlg = dialog()
+        import utils.custom_proj as proj
+        dlg = proj.local_proj_dialog()
         dlg.exec()
 
     #Calling Add Software UI
@@ -210,80 +208,6 @@ class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
         print(str(toolname))
         os.startfile(tooldir[toolname]) 
 
-
-#Create Project Dialog 
-class dialog(ui.create_project_ui.Ui_Dialog,QtWidgets.QDialog):
-    def __init__(self):
-        super(dialog,self).__init__()
-        self.setupUi(self)
-        self.setWindowTitle("Glacier App Launcher - Create Project")
-        self.setWindowIcon(PySide6.QtGui.QIcon("bin/logo/favicon_sq_small.png"))
-        self.setStyleSheet(qdarkstyle.load_stylesheet(qt_api = 'PySide6'))                    #set darkmode
-
-        self.Project_TB.clicked.connect(self.manual_dir)
-        self.Seq_TB.clicked.connect(self.manual_dir)
-        self.Shot_TB.clicked.connect(self.manual_dir)
-        self.create_buttons.accepted.connect(self.create_pro_dirs)
-        
-        
-
-    def manual_dir(self):
-        man_path = QtWidgets.QFileDialog.getExistingDirectory(self,'Select Folder')
-        
-        if man_path:
-            self.project_LE.setText(man_path)
-            # self.Seq_LE.setText(man_path)
-            # self.Shot_LE.setText(man_path)
-            
-
-        if not man_path:
-            QtWidgets.QMessageBox.about(self,"path Required","Please, pick the path")
-
-    def create_pro_dirs(self):
-        prodir = self.project_LE.text()
-        seqdir = self.Seq_LE.text()
-        shotdir = self.Shot_LE.text()
-        shot_subdirs = ['houdini','nuke']
-        dcc_subdir = ['hip','renders','cache']
-
-        prodir.replace('\\','/')
-        # os.mkdir(prodir)
-        os.mkdir(os.path.join(prodir,seqdir,shotdir))
-        mkdir = prodir + '/' +seqdir + '/' + shotdir
-        print(mkdir)
-
-#Add software Directories one time thing
-class addsoft(ui.add_software_ui.Ui_Dialog,QtWidgets.QDialog):
-    def __init__(self):
-        super(addsoft,self).__init__()
-        self.setupUi(self)
-        self.setWindowTitle("Add Software")
-        self.setWindowIcon(PySide6.QtGui.QIcon("bin/logo/favicon_sq_small.png"))
-        self.setStyleSheet(qdarkstyle.load_stylesheet(qt_api = 'PySide6'))                    #set darkmode
-
-
-        self.softpath_TB.clicked.connect(self.getsoft)
-        self.reg_buttonBox.accepted.connect(self.add_to_json)
-       
-
-    def getsoft(self):
-        softpath,ext = QtWidgets.QFileDialog.getOpenFileName(self,'Select Folder')
-        if softpath:
-            self.softpath_LE.setText(softpath)
-
-    def add_to_json(self):
-        softname = self.softname_LE.text()
-        softpath = self.softpath_LE.text()
-        
-        with open(jsonpath) as jsonfile:
-            j_soft = json.load(jsonfile)
-
-        j_soft['key'] = ['object']
-
-    # Writing to sample.json
-        with open(jsonpath, "a") as outfile:
-            json.dump(j_soft,outfile)
-            
         
 #About Page
 class about_page(ui.about_page.Ui_Dialog,QtWidgets.QDialog):
