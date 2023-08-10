@@ -22,7 +22,14 @@ class setup_dailog(ui.setup_dirs_ui.Ui_Dialog,QtWidgets.QDialog):
         
         self.Save_Bbox.accepted.connect(self.save_dirs)
 
-        self.studio_dir_TB.clicked.connect(self.pick_path)
+        #Set toolButtons
+        self.studio_dir_TB.clicked.connect(self.pick_studio_path)
+        self.houdini_tB.clicked.connect(self.pick_houdini_path)
+        self.nuke_tB.clicked.connect(self.pick_nuke_path)
+        self.maya_tB.clicked.connect(self.pick_maya_path)
+        self.discord_tB.clicked.connect(self.pick_discord_path)
+        self.unreal_tB.clicked.connect(self.pick_unreal_path)
+
         
     def save_dirs(self):
         studio_dir = self.studio_dir_LE.text()
@@ -57,16 +64,53 @@ class setup_dailog(ui.setup_dirs_ui.Ui_Dialog,QtWidgets.QDialog):
 
 
 
-    def pick_path(self):
+    def pick_studio_path(self):
         man_path = QtWidgets.QFileDialog.getExistingDirectory(self,'Select Folder')
         
         if man_path:
             self.studio_dir_LE.setText(man_path)
-        
         else:
-            QtWidgets.QMessageBox.about(self,"path Required","Please, pick the path")
+            QtWidgets.QMessageBox.about(self,"Path Required","Please, Pick the path")
 
+    def pick_houdini_path(self):
+        man_path = QtWidgets.QFileDialog.getExistingDirectory(self,'Select Folder')
+        
+        if man_path:
+            self.houdini_dir_LE.setText(man_path)
+        else:
+            QtWidgets.QMessageBox.about(self,"Path Required","Please, Pick the path")
+
+    def pick_maya_path(self):
+        man_path = QtWidgets.QFileDialog.getExistingDirectory(self,'Select Folder')
+        
+        if man_path:
+            self.maya_dir_LE.setText(man_path)
+        else:
+            QtWidgets.QMessageBox.about(self,"Path Required","Please, Pick the path")
    
+    def pick_nuke_path(self):
+        man_path = QtWidgets.QFileDialog.getExistingDirectory(self,'Select Folder')
+        
+        if man_path:
+            self.nukedir_LE.setText(man_path)
+        else:
+            QtWidgets.QMessageBox.about(self,"Path Required","Please, Pick the path")
+
+    def pick_unreal_path(self):
+        man_path = QtWidgets.QFileDialog.getExistingDirectory(self,'Select Folder')
+        
+        if man_path:
+            self.unreal_dir_LE.setText(man_path)
+        else:
+            QtWidgets.QMessageBox.about(self,"path Required","Please, Pick the path")
+
+    def pick_discord_path(self):
+        man_path = QtWidgets.QFileDialog.getExistingDirectory(self,'Select Folder')
+        
+        if man_path:
+            self.discord_dir_LE.setText(man_path)
+        else:
+            QtWidgets.QMessageBox.about(self,"path Required","Please, Pick the path")
 
 # if __name__ == '__main__':
 #     app = QtWidgets.QDialog()

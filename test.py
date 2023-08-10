@@ -2,89 +2,95 @@ import json
 import os
 from PySide6 import QtWidgets
 
-import ui.create_project_ui
-# j = open('tools_path.json')
-# k = json.load(j)
-
-# #print(k)
-# for i in k:
-#     #print(i)
-#     print(k[i])
-
 import sys
+import os
+import cv2
+from PyQt5.QtWidgets import QApplication, QMainWindow, QLabel, QPushButton, QVBoxLayout, QWidget, QLineEdit, QHBoxLayout, QFileDialog
 
-from PySide6.QtWidgets import QApplication, QDialog, QMainWindow, QPushButton
-import ui.create_project_ui
+class SequencePlayer(QMainWindow):
+    def __init__(self, parent=None):
+        super(SequencePlayer, self).__init__(parent)
+        self.setWindowTitle("Sequence Player with Annotation")
 
-class MainWindow(QMainWindow):
-    def __init__(self):
-        super().__init__()
+        self.current_frame_index = 0
+        self.image_sequence = []
+        self.annotations = []
 
-        self.setWindowTitle("My App")
+        # Create GUI elements
+        self.image_label = QLabel(self)
+        self.annotation_input = QLineEdit(self)
+        self.load_button = QPushButton("Load Sequence", self)
+        self.prev_button = QPushButton("Previous", self)
+        self.next_button = QPushButton("Next", self)
+        self.save_button = QPushButton("Save Annotations", self)
 
-        button = QPushButton("Press me for a dialog!")
-        button.clicked.connect(self.button_clicked)
-        self.setCentralWidget(button)
+        # Connect buttons to functions
+        self.load_button.clicked.connect(self.load_sequence)
+        self.prev_button.clicked.connect(self.show_previous_frame)
+        self.next_button.clicked.connect(self.show_next_frame)
+        self.save_button.clicked.connect(self.save_annotations)
 
-    def button_clicked(self, s):
-        print("click", s)
+        # Layout setup
+        self.layout = QVBoxLayout()
+        self.layout.addWidget(self.image_label)
+        self.layout.addWidget(self.annotation_input)
+        button_layout = QHBoxLayout()
+        button_layout.addWidget(self.load_button)
+        button_layout.addWidget(self.prev_button)
+        button_layout.addWidget(self.next_button)
+        button_layout.addWidget(self.save_button)
+        self.layout.addLayout(button_layout)
 
-        dlg = dialog()
-        if dlg.exec():
-            print("Success!")
-        else:
-            print("Cancel!")
+        main_widget = QWidget(self)
+        main_widget.setLayout(self.layout)
+        self.setCentralWidget(main_widget)
 
-class dialog(ui.create_project_ui.Ui_Dialog,QtWidgets.QDialog):
-    def __init__(self):
-        super(dialog,self).__init__()
-        self.setupUi(self)
-        self.setWindowTitle("App Launcher - Build 1.2.0")
+    def load_sequence(self):
+        options = QFileDialog.Options()
+        file_path, _ = QFileDialog.getOpenFileName(self, "Load Image Sequence", "", "Image Files (*.png *.jpg *.jpeg *.bmp);;All Files (*)", options=options)
 
+        if file_path:
+            self.image_sequence = []
+            self.annotations = []
 
+            image_folder = os.path.dirname(file_path)
+            image_files = sorted([f for f in os.listdir(image_folder) if f.endswith((".png", ".jpg", ".jpeg", ".bmp"))])
 
-# class CustomDialog(QtWidgets.QDialog):
-#     def __init__(self, parent=None):
-#         super().__init__(parent)
+            for image_file in image_files:
+                image_path = os.path.join(image_folder, image_file)
+                self.image_sequence.append(cv2.imread(image_path))
+                self.annotations.append("")
 
-#         self.setWindowTitle("HELLO!")
-        
+            self.show_frame(self.current_frame_index)
 
-#         QBtn = QDialogButtonBox.Ok | QDialogButtonBox.Cancel
+    def show_frame(self, frame_index):
+        frame = self.image_sequence[frame_index]
+        annotation = self.annotations[frame_index]
 
-#         self.buttonBox = QDialogButtonBox(QBtn)
-#         self.buttonBox.accepted.connect(self.accept)
-#         self.buttonBox.rejected.connect(self.reject)
+        height, width, channels = frame.shape
+        bytes_per_line = channels * width
+        q_img = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
+        q_img = QImage(q_img.data, width, height, bytes_per_line, QImage.Format_RGB888)
+        pixmap = QPixmap.fromImage(q_img)
+        self.image_label.setPixmap(pixmap)
+        self.annotation_input.setText(annotation)
 
-#         self.layout = QVBoxLayout()
-#         message = QLabel("Something happened, is that OK?")
-#         self.layout.addWidget(message)
-#         self.layout.addWidget(self.buttonBox)
-#         self.setLayout(self.layout)
+    def show_previous_frame(self):
+        if self.current_frame_index > 0:
+            self.current_frame_index -= 1
+            self.show_frame(self.current_frame_index)
 
-app = QApplication(sys.argv)
+    def show_next_frame(self):
+        if self.current_frame_index < len(self.image_sequence) - 1:
+            self.current_frame_index += 1
+            self.show_frame(self.current_frame_index)
 
-window = MainWindow()
-window.show()
+    def save_annotations(self):
+        for i, annotation in enumerate(self.annotations):
+            self.annotations[i] = self.annotation_input.text()
 
-app.exec()
-
-# class createproj_window(create_project_ui.Ui_Dialog,QtWidgets.QMainWindow):
-#     def __init__(self):
-#         super(createproj_window,self).__init__()
-#         self.setupUi(self)
-#         self.setWindowTitle("App Launcher - Build 1.2.0")
-
-
-# if __name__ == '__main__':
-#     app = QtWidgets.QApplication()
-#     appLaunch = createproj_window()
-#     appLaunch.show()
-#     app.exec()
-
-
-# path = 'D:\Work\houdinifx'
-# print("Only directories:")
-# print([ name for name in os.listdir(path) if os.path.isdir(os.path.join(path, name)) ])
-# print("\nOnly files:")
-# print([ name for name in os.listdir(path) if not os.path.isdir(os.path.join(path, name)) ])
+if __name__ == "__main__":
+    app = QApplication(sys.argv)
+    player = SequencePlayer()
+    player.show()
+    sys.exit(app.exec_())

@@ -30,6 +30,7 @@ username = userdata.get('user')
 studio_dir = userdata.get('studiodir')
 
 tooldata = user_json.get('tools')
+# print(tooldata)
 
 
 #required data paths to refer
@@ -54,13 +55,13 @@ class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
     
         
         self.toolssetup()
-        self.populate_project()
-        self.populate_seq()
-        self.populate_shot()
+        
+        
         
         self.project_cB.currentTextChanged.connect(self.populate_seq)
         self.seq_cB.currentTextChanged.connect(self.populate_shot)
-        
+        self.shot_cB.currentTextChanged.connect(self.set_dir)
+
         self.launch_button.clicked.connect(self.opentool)
         self.manual_toolButton.clicked.connect(self.manual_dir)
 
@@ -78,10 +79,16 @@ class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
 
         #Load Tasks From Google Sheets API
         self.populate_status()
+        
         self.reload_task_PB.clicked.connect(self.reload_task)
+        self.reload_task_PB.clicked.connect(self.populate_project)
 
         self.dir_tree_widget.itemSelectionChanged.connect(self.get_tree_sel)
-        # QtWidgets.QTreeWidgetItem.
+
+        #Load ComboBox after loading and creating dirs
+        self.populate_project()
+        self.populate_seq()
+        self.populate_shot()
 
 
     #Toggle Dark Mode
@@ -174,10 +181,17 @@ class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
         shot_list = [item for item in os.listdir(sel_pro) if os.path.isdir(os.path.join(sel_pro, item))]
 
         self.shot_cB.addItems(shot_list)
-        
 
         # self.manual_path_Ldit.setText(os.path.join(studio_dir,sel_pro))
-        #def select_tools():
+        
+
+    def set_dir(self):
+        show = self.shot_cB.currentText()
+        seq = self.seq_cB.currentText()
+        shot = self.shot_cB.currentText()
+        studio_dir.replace('\\','/')
+
+        self.manual_path_Ldit.setText(os.path.join(studio_dir,show,seq,shot))
 
     def manual_dir(self):
         man_path,ext = QtWidgets.QFileDialog.getOpenFileName(self,'Select Folder')
@@ -185,7 +199,7 @@ class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
             self.manual_path_Ldit.setText(man_path)
 
         if not man_path:
-            QtWidgets.QMessageBox.about(self,"path Required","Please, pick the path")
+            QtWidgets.QMessageBox.about(self,"Path Required","Please, pick the path")
 
     #Calling Create Project UI
     def create_project(self):
@@ -215,6 +229,7 @@ class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
 
     def toolssetup(self):
         self.tools_cB.addItems(tooldata)
+        
     
     def opentool(self):
         toolname = self.tools_cB.currentText()

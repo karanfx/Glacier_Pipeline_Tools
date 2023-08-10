@@ -1,5 +1,6 @@
 {
     "houdini" : ["scene","cache","flipbook","opengl","renders","geo","dependency"],
     "nuke" : ["scene","renders","prep","footage"],
-    "client" : ["received","sent"]
+    "client" : ["received","sent"],
+    "notes" : []
 }
