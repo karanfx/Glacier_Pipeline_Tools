@@ -55,9 +55,7 @@ class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
     
         
         self.toolssetup()
-        
-        
-        
+        #Populate Combo Boxs
         self.project_cB.currentTextChanged.connect(self.populate_seq)
         self.seq_cB.currentTextChanged.connect(self.populate_shot)
         self.shot_cB.currentTextChanged.connect(self.set_dir)

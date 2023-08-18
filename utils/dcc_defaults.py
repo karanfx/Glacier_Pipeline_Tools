@@ -4,7 +4,7 @@ import ctypes
 import sys
 # import runas
 
-tooldir = json.load(open('bin/data/softpaths.json'))
+# tooldir = json.load(open('bin/data/softpaths.json'))
 
 # To DO:
 # Setup Default scene -almost done

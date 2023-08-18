@@ -4,11 +4,12 @@ import os
 import json
 import datetime
 
-shot_status = "bin/data/shot_status.json"
+
 shot_dir = "D:/Work/houdinifx/pipe_test/Show01/Seq_AB/Shot_AB001"
 
 def save_notes(shot_dir):
 
+    shot_status = "bin/data/shot_status.json"
     with open(shot_status,"r") as f:
         data = json.load(f)
         # print(data)
@@ -31,17 +32,35 @@ def save_notes(shot_dir):
     cur_date = str(datetime.date.today()).replace("-","_")
     filename = "notes.txt"
     note_dir = os.path.join(shot_dir,"notes",cur_date)
-    
-    if not note_dir:
-        os.makedirs(os.path.join(note_dir,"annotation"))
-    note_file = os.path.join(note_dir,filename)
-    
-    #Save Notes
-    for k,v in notes_data.items():
-        if k == "Shot_AB001":
 
-            with open(note_file,"w") as n:
-                n.write(v)
+    #check last note match and update
+    last_notes = os.listdir(os.path.join(shot_dir,"notes"))
+    last_notes.sort()
+
+    last_note_dir = os.path.join(shot_dir,"notes",last_notes[-1],filename)
+    print(last_note_dir)
+    load_note = open(last_note_dir,"r")
+    last_note = load_note.read()
+    load_note.close()
+    print(last_note)
+
+    #Save Notes
+    cur_note = "Make it High res"
+
+    
+
+    if last_note is not cur_note:
+   
+        if not os.path.isdir(note_dir):
+            os.makedirs(os.path.join(note_dir,"annotation"))
+            note_file = os.path.join(note_dir,filename)
+
+            for k,v in notes_data.items():
+                if k == "Shot_AB001":
+                    with open(note_file,"w") as n:
+                        n.write(v)
+    
+    
 
 save_notes(shot_dir)
 
