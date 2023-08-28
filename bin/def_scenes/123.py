@@ -1,0 +1,1 @@
+hou.hipFile.merge("D:/Work/python_dev/QT_project_launcher/bin/def_scenes/hou_default.hip")
