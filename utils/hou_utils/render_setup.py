@@ -24,6 +24,11 @@ for node in hou.selectedNodes():
     render_node = out.createNode("ifd",render_name)
     #pick render objects
     render_node.parm("forceobject").set(geo_node.path())
+
+    render_node.parm("trange").set(1)
+    render_node.parm("vm_renderengine").set(3)
+    render_node.parm("f1").setExpression("$FSTART")
+    render_node.parm("f2").setExpression("$FEND")
     
     #create material
     mat = hou.node("/mat")

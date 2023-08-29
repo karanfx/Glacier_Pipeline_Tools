@@ -41,7 +41,7 @@ def import_usd(dir):
         pass
 
 
-layout = "D:/Work/houdinifx/pipe_test/Show01/Seq_AB/Shot_AB001/layout/"
+layout = "E:/Work/houdinifx/pipe_test/Show01/Seq_AB/Shot_AB001/layout/"
 for sub in os.listdir(layout):
     dirs = os.path.join(layout,sub)
     # print(dirs)
