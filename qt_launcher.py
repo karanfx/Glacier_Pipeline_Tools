@@ -10,7 +10,8 @@ import PySide6.QtWidgets
 
 #Import Utils
 from utils.google_sheet_api import get_status
-from utils.create_project_dirs import create_shot_dirs
+from utils.create_project_dirs import create_shot_dirs,create_libs
+
 
 
 #Import UIs
@@ -127,7 +128,11 @@ class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
 
             #Create Dirs
             create_shot_dirs(studio_dir)
-
+            create_libs(studio_dir)
+            
+    def reload_task(self):
+        get_status(username)
+        self.populate_status()
 
     #Get Selected Task
     def get_tree_sel(self):
@@ -151,14 +156,10 @@ class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
         self.shot_cB.setCurrentText(curr_shot)
         # print(curr_show,curr_shot)
 
-    def reload_task(self):
-        get_status(username)
-        self.populate_status()
-
-    
     #populate project dirs
     def populate_project(self):
         prodirs = [ name for name in os.listdir(studio_dir) if os.path.isdir(os.path.join(studio_dir, name)) ]
+        prodirs.remove('libs')
         self.project_cB.addItems(prodirs)
 
     def populate_seq(self):
@@ -167,6 +168,7 @@ class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
         sel_pro = self.project_cB.currentText()
         sel_pro = os.path.join(studio_dir,sel_pro)
         seq_list = [item for item in os.listdir(sel_pro) if os.path.isdir(os.path.join(sel_pro, item))]
+        seq_list.remove('libs')
         self.seq_cB.addItems(seq_list)
         
     
@@ -177,7 +179,7 @@ class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
         sel_seq = self.seq_cB.currentText()
         sel_pro = os.path.join(studio_dir,sel_show,sel_seq)
         shot_list = [item for item in os.listdir(sel_pro) if os.path.isdir(os.path.join(sel_pro, item))]
-
+        shot_list.remove('libs')
         self.shot_cB.addItems(shot_list)
 
         # self.manual_path_Ldit.setText(os.path.join(studio_dir,sel_pro))

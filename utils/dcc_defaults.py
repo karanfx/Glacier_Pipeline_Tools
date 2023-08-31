@@ -8,9 +8,9 @@ import sys
 
 # To DO:
 # Setup Default scene -almost done
-# Load custom tools
-# Setup project directories
-# Setup Frame Range
+# Load custom tools 
+# Setup project directories -done
+# Setup Frame Range - done
 # Auto-Load Assets
 
 
