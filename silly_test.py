@@ -1,9 +1,9 @@
-import sys
-from PySide6.QtWidgets import QApplication, QMainWindow, QTreeWidget, QTreeWidgetItem
+# import sys
+# from PySide6.QtWidgets import QApplication, QMainWindow, QTreeWidget, QTreeWidgetItem
 
 
-import cv2
-import os
+# import cv2
+# import os
 
 # class ImageSequencePlayer:
 #     def __init__(self, folder_path):
@@ -55,4 +55,48 @@ import os
 #     player = ImageSequencePlayer(folder_path)
 #     player.play()
 
-os.system("Houdini")
+# os.system("Houdini")
+
+import sys
+from PySide2.QtWidgets import QApplication, QMainWindow, QWidget, QGridLayout, QPushButton
+from PySide2.QtGui import QIcon, QPixmap
+
+class GridLayoutExample(QMainWindow):
+    def __init__(self):
+        super().__init__()
+
+        self.initUI()
+
+    def initUI(self):
+        central_widget = QWidget(self)
+        self.setCentralWidget(central_widget)
+
+        grid_layout = QGridLayout()
+        central_widget.setLayout(grid_layout)
+
+        # Create 4x4 grid of push buttons
+        for row in range(4):
+            for col in range(4):
+                button = QPushButton()
+                button.setFixedSize(200, 200)  # Set button size to 200x200 pixels
+
+                # Add an image or GIF icon to the button
+                icon_path = f'path_to_icon/icon_{row * 4 + col + 1}.png'  # Replace with your icon file path
+                icon = QIcon(QPixmap(icon_path))
+                button.setIcon(icon)
+                button.setIconSize(button.size())  # Make the icon fit the button size
+
+                grid_layout.addWidget(button, row, col)
+
+        self.setWindowTitle('PySide2 GridLayout Example')
+        self.setGeometry(100, 100, 800, 800)
+
+def main():
+    app = QApplication(sys.argv)
+    window = GridLayoutExample()
+    window.show()
+    sys.exit(app.exec_())
+
+if __name__ == '__main__':
+    main()
+

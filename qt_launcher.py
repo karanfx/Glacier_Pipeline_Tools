@@ -230,11 +230,34 @@ class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
     def toolssetup(self):
         self.tools_cB.addItems(tooldata)
         
-    
+    #open DCCs
     def opentool(self):
         toolname = self.tools_cB.currentText()
+        proj = self.project_cB.currentText()
+        seq = self.seq_cB.currentText()
+        shot = self.shot_cB.currentText()
+        shot_dir = self.manual_path_Ldit.text()
+        shot_dir.replace("\\","/")
+        scene_dir = os.path.join(shot_dir,"houdini/scene")
+
         # print(str(toolname))
         os.startfile(tooldata[toolname]) 
+
+        if toolname == "Houdini_CLI":
+            #open def scene
+            command = tooldata[toolname]
+            print(command)
+            command += "hscript E:/Work/python_dev/QT_project_launcher/bin/def_scenes/hou_default.hip"
+            #set variables 
+            from utils.hou_utils.set_shot_def import set_hou_shot_def
+            set_hou_shot_def(proj,seq,shot,username,shot_dir,1001,1200)
+
+            command += 'hython -c "import sys; sys.path.append("E:/Work/python_dev/QT_project_launcher/utils/hou_utils/");'
+            command += 'import set_hou_shot_def; set_hou_shot_def(proj,seq,shot,username,shot_dir,1001,1200)'
+            # command += "python E:/Work/python_dev/QT_project_launcher/utils/hou_utils/set_shot_def.py"
+            #save scene in shot dir
+
+            os.system(command)
 
         
 #About Page

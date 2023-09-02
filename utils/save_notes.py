@@ -5,7 +5,7 @@ import json
 import datetime
 
 
-shot_dir = "D:/Work/houdinifx/pipe_test/Show01/Seq_AB/Shot_AB001"
+shot_dir = "D:\test_studio\Show01\Seq_AB\Shot_AB001\houdini"
 
 def save_notes(shot_dir):
 
@@ -34,8 +34,11 @@ def save_notes(shot_dir):
     note_dir = os.path.join(shot_dir,"notes",cur_date)
 
     #check last note match and update
-    last_notes = os.listdir(os.path.join(shot_dir,"notes"))
-    last_notes.sort()
+    if os.listdir(os.path.join(shot_dir,"notes")): 
+        last_notes = os.listdir(os.path.join(shot_dir,"notes"))
+        last_notes.sort()
+    else: 
+        os.makedirs(os.path.join(shot_dir,"notes"))
 
     last_note_dir = os.path.join(shot_dir,"notes",last_notes[-1],filename)
     print(last_note_dir)
