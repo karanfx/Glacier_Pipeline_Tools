@@ -121,7 +121,7 @@ class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
             task.pop(3)
             
             task = task[1:]
-            
+            print(task)
             # print(list(shot))
             item = QtWidgets.QTreeWidgetItem(list(task))
             self.dir_tree_widget.addTopLevelItem(item)
@@ -137,7 +137,7 @@ class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
     #Get Selected Task
     def get_tree_sel(self):
         #Get Selection
-        sel_task = self.dir_tree_widget.selectedItems()
+        sel_task = self.dir_tree_widget.selectedItems()        
         curr_show = [item.text(6) for item in sel_task]
         curr_show = str(curr_show[0])
 

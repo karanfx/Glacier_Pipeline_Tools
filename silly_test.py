@@ -58,8 +58,9 @@
 # os.system("Houdini")
 
 import sys
-from PySide2.QtWidgets import QApplication, QMainWindow, QWidget, QGridLayout, QPushButton
+from PySide2.QtWidgets import QApplication, QMainWindow, QWidget, QGridLayout, QPushButton, QVBoxLayout, QSlider
 from PySide2.QtGui import QIcon, QPixmap
+from PySide2.QtCore import Qt
 
 class GridLayoutExample(QMainWindow):
     def __init__(self):
@@ -71,25 +72,49 @@ class GridLayoutExample(QMainWindow):
         central_widget = QWidget(self)
         self.setCentralWidget(central_widget)
 
-        grid_layout = QGridLayout()
-        central_widget.setLayout(grid_layout)
+        main_layout = QVBoxLayout()
+        central_widget.setLayout(main_layout)
 
-        # Create 4x4 grid of push buttons
-        for row in range(4):
-            for col in range(4):
-                button = QPushButton()
-                button.setFixedSize(200, 200)  # Set button size to 200x200 pixels
+        self.grid_layout = QGridLayout()
+        main_layout.addLayout(self.grid_layout)
 
-                # Add an image or GIF icon to the button
-                icon_path = f'path_to_icon/icon_{row * 4 + col + 1}.png'  # Replace with your icon file path
-                icon = QIcon(QPixmap(icon_path))
-                button.setIcon(icon)
-                button.setIconSize(button.size())  # Make the icon fit the button size
+        self.slider = QSlider(Qt.Vertical)
+        self.slider.setMinimum(1)
+        self.slider.setMaximum(16)
+        self.slider.setValue(16)
+        self.slider.valueChanged.connect(self.updateButtons)
 
-                grid_layout.addWidget(button, row, col)
+        main_layout.addWidget(self.slider)
+
+        # Create 16 buttons by default
+        self.createButtons(20)
 
         self.setWindowTitle('PySide2 GridLayout Example')
         self.setGeometry(100, 100, 800, 800)
+
+    def createButtons(self, num_buttons):
+        # Clear existing buttons from the grid layout
+        for i in reversed(range(self.grid_layout.count())):
+            widget = self.grid_layout.itemAt(i).widget()
+            if widget is not None:
+                widget.deleteLater()
+
+        # Create buttons and add them to the grid layout
+        for row in range(4):
+            for col in range(4):
+                button_num = row * 4 + col + 1
+                if button_num <= num_buttons:
+                    button = QPushButton()
+                    button.setFixedSize(200, 200)
+                    icon_path = f'path_to_icon/icon_{button_num}.png'
+                    icon = QIcon(QPixmap(icon_path))
+                    button.setIcon(icon)
+                    button.setIconSize(button.size())
+                    self.grid_layout.addWidget(button, row, col)
+
+    def updateButtons(self):
+        num_buttons = self.slider.value()
+        self.createButtons(num_buttons)
 
 def main():
     app = QApplication(sys.argv)
@@ -99,4 +124,5 @@ def main():
 
 if __name__ == '__main__':
     main()
+
 
