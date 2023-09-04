@@ -71,7 +71,7 @@ class ClipBrowser(QtWidgets.QWidget):
         agent = self.ui.agent_CB.currentText()
         clips = self.ui.clips_CB.currentText()
 
-        agent_dir = os.path.join(agent_dir,agent)
+        agent_path = os.path.join(agent_dir,agent)
         clips_dir = os.path.join(clip_dir,clips)
 
 
