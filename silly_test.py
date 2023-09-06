@@ -132,7 +132,6 @@ from PySide2.QtWidgets import QApplication, QMainWindow, QWidget, QGridLayout, Q
 from PySide2.QtGui import QIcon, QPixmap
 from PySide2 import QtUiTools
 
-ui_file = "E:\Work\python_dev\QT_project_launcher\qt_ui_files\hou_tools_ui\crowd_preview.ui"
 class GridLayoutExample(QMainWindow):
     def __init__(self, ui_file):
         super().__init__()
@@ -142,12 +141,14 @@ class GridLayoutExample(QMainWindow):
         self.central_widget = loader.load(ui_file)
         self.setCentralWidget(self.central_widget)
 
-        # Access the Qwidget where you want to add the grid layout
+        # Access the QWidget where you want to add the grid layout
         self.grid_widget = self.central_widget.findChild(QWidget, 'gridWidget')
 
         # Initialize button count and slider position
         self.button_count = 16
-        self.slider_position = 0
+        self.slider = self.central_widget.findChild(QSlider, 'slider')
+        self.slider.setRange(0, self.button_count - 1)
+        self.slider.valueChanged.connect(self.onSliderValueChanged)
 
         self.initUI()
 
@@ -160,13 +161,7 @@ class GridLayoutExample(QMainWindow):
         grid_layout = QGridLayout()
         layout.addLayout(grid_layout)
 
-        # Create a slider for scrolling through buttons
-        slider = QSlider()
-        slider.setOrientation(Qt.Vertical)
-        slider.setRange(0, self.button_count - 1)
-        slider.setValue(self.slider_position)
-        slider.valueChanged.connect(self.onSliderValueChanged)
-        layout.addWidget(slider)
+        self.buttons = []
 
         # Create 4x4 grid of push buttons
         for row in range(4):
@@ -183,18 +178,24 @@ class GridLayoutExample(QMainWindow):
                     button.setIconSize(button.size())  # Make the icon fit the button size
 
                     grid_layout.addWidget(button, row, col)
+                    self.buttons.append(button)
 
         self.setWindowTitle('PySide2 GridLayout Example')
         self.setGeometry(100, 100, 800, 800)
 
     def onSliderValueChanged(self, value):
         # Handle slider value change to scroll through buttons
-        self.slider_position = value
-        # Update button visibility based on slider position
+        for button in self.buttons:
+            button.setVisible(False)
+
+        for i in range(value, min(value + 16, self.button_count)):
+            self.buttons[i].setVisible(True)
 
 def main():
     app = QApplication(sys.argv)
     # ui_file = 'your_ui_file.ui'  # Replace with the path to your UI file
+    ui_file = "E:\Work\python_dev\QT_project_launcher\qt_ui_files\hou_tools_ui\crowd_preview.ui"
+
     window = GridLayoutExample(ui_file)
     window.show()
     sys.exit(app.exec_())
