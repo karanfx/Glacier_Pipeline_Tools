@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <ui version="4.0">
- <class>Crowd_Broser</class>
- <widget class="QWidget" name="Crowd_Broser">
+ <class>Crowd_Browser</class>
+ <widget class="QWidget" name="Crowd_Browser">
   <property name="geometry">
    <rect>
     <x>0</x>
@@ -11,7 +11,7 @@
    </rect>
   </property>
   <property name="windowTitle">
-   <string>Form</string>
+   <string>Glacier Tools - Crowd Browser</string>
   </property>
   <layout class="QGridLayout" name="gridLayout_2">
    <item row="0" column="0">
@@ -97,7 +97,18 @@
     </widget>
    </item>
    <item row="1" column="0">
-    <widget class="QWidget" name="clip_preview_WD" native="true"/>
+    <layout class="QHBoxLayout" name="horizontalLayout_5">
+     <item>
+      <widget class="QWidget" name="clip_preview_WD" native="true"/>
+     </item>
+     <item>
+      <widget class="QScrollBar" name="clip_scroll">
+       <property name="orientation">
+        <enum>Qt::Vertical</enum>
+       </property>
+      </widget>
+     </item>
+    </layout>
    </item>
    <item row="2" column="0">
     <widget class="QFrame" name="frame_2">
