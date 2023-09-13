@@ -15,7 +15,7 @@ from utils.create_project_dirs import create_shot_dirs,create_libs
 
 
 #Import UIs
-import ui.main_ui_6
+import ui.main_ui_7_ui as main_ui
 import ui.create_project_ui
 import ui.add_software_ui
 import ui.about_page
@@ -40,7 +40,7 @@ tooldata = user_json.get('tools')
 # username = "Karan"
 
 
-class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
+class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
     def __init__(self):
         super(qt_launcher,self).__init__()
         self.setupUi(self)
@@ -60,11 +60,15 @@ class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
         self.project_cB.currentTextChanged.connect(self.populate_seq)
         self.seq_cB.currentTextChanged.connect(self.populate_shot)
         self.shot_cB.currentTextChanged.connect(self.set_dir)
+        self.tools_cB.currentTextChanged.connect(self.populate_versions)
 
         #Launch apps
         self.launch_button.clicked.connect(self.setup_env)
         self.launch_button.clicked.connect(self.opentool)
         self.manual_toolButton.clicked.connect(self.manual_dir)
+
+        self.launch_version_button.clicked.connect(self.open_version)
+
 
         #Set Action Menu
         self.action_Create_Project_2.triggered.connect(self.create_project)
@@ -90,6 +94,8 @@ class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
         self.populate_project()
         self.populate_seq()
         self.populate_shot()
+
+        self.populate_versions()
 
 
     #Toggle Dark Mode
@@ -186,6 +192,24 @@ class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
 
         # self.manual_path_Ldit.setText(os.path.join(studio_dir,sel_pro))
         
+    #populate versions
+    def populate_versions(self):
+        sel_show = self.project_cB.currentText()
+        sel_seq = self.seq_cB.currentText()
+        sel_shot = self.shot_cB.currentText()
+        tool = self.tools_cB.currentText()
+
+        version_path = os.path.join(studio_dir,sel_show,sel_seq,sel_shot,tool,"scene")
+        print(os.listdir(version_path))
+        versions = os.listdir(version_path)
+        versions.sort(reverse=True)
+        # versions = [item for item in os.listdir(version_path) if os.path.isdir(os.path.join(version_path, item))]
+        versions.remove('backup')
+
+        self.version_file_CB.addItems(versions)
+
+    def open_version(self):
+        print("open file")
 
     def set_dir(self):
         show = self.shot_cB.currentText()
@@ -288,7 +312,7 @@ class qt_launcher(ui.main_ui_6.Ui_MainWindow,QtWidgets.QMainWindow):
             for var,data in variables.items():
                 env.write(var +"="+ "\"" + data + "/" + "\"" + "\n")
 
-
+    
 
 
     #open DCCs
