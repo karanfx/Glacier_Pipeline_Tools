@@ -24,7 +24,7 @@ def create_shot_dirs(studiodir):
         shot_name = task[shot_idx]
         # print(show_name,seq_name,shot_name)
         shotdir = os.path.join(studiodir,show_name,seq_name,shot_name)
-        print(shotdir)
+        # print(shotdir)
         
 
         with open("bin/data/folder_struct.json") as f:
@@ -35,7 +35,7 @@ def create_shot_dirs(studiodir):
                 path = os.path.join(shotdir,k,dir)
                 if not os.path.isdir(path):
                     os.makedirs(path)
-                print(path)
+                # print(path)
 
 def create_libs(studiodir):
     libs = "libs"

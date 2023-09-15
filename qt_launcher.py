@@ -88,7 +88,10 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         self.reload_task_PB.clicked.connect(self.reload_task)
         self.reload_task_PB.clicked.connect(self.populate_project)
 
+        #Update data in combo boxs
         self.dir_tree_widget.itemSelectionChanged.connect(self.get_tree_sel)
+        self.dir_tree_widget.itemSelectionChanged.connect(self.populate_versions)
+
 
         #Load ComboBox after loading and creating dirs
         self.populate_project()
@@ -146,16 +149,13 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
     def get_tree_sel(self):
         #Get Selection
         sel_task = self.dir_tree_widget.selectedItems()        
-        curr_show = [item.text(6) for item in sel_task]
-        curr_show = str(curr_show[0])
-
-        curr_seq = [item.text(1) for item in sel_task]
-        curr_seq = str(curr_seq[0])
-
-        curr_shot = [item.text(0) for item in sel_task]
-        curr_shot = str(curr_shot[0])
-
-        current_dir = os.path.join(studio_dir,curr_show,curr_seq,curr_shot)
+     
+        current_dir = ""
+        for item in sel_task:
+            curr_shot = str(item.text(0))
+            curr_seq = str(item.text(1))
+            curr_show = str(item.text(6))
+            current_dir = os.path.join(studio_dir,curr_show,curr_seq,curr_shot)
 
         #Set selected to manual path
         self.manual_path_Ldit.setText(current_dir)
@@ -163,6 +163,7 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         self.seq_cB.setCurrentText(curr_seq)
         self.shot_cB.setCurrentText(curr_shot)
         # print(curr_show,curr_shot)
+        print(current_dir)
 
     #populate project dirs
     def populate_project(self):
@@ -179,7 +180,6 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         seq_list.remove('libs')
         self.seq_cB.addItems(seq_list)
         
-    
     def populate_shot(self):
         self.shot_cB.clear()
 
@@ -194,25 +194,44 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         
     #populate versions
     def populate_versions(self):
+        self.version_file_CB.clear()
+        #Get Current Data
         sel_show = self.project_cB.currentText()
         sel_seq = self.seq_cB.currentText()
         sel_shot = self.shot_cB.currentText()
         tool = self.tools_cB.currentText()
 
         version_path = os.path.join(studio_dir,sel_show,sel_seq,sel_shot,tool,"scene")
-        print(os.listdir(version_path))
+        # print(os.listdir(version_path))
         versions = os.listdir(version_path)
-        versions.sort(reverse=True)
         # versions = [item for item in os.listdir(version_path) if os.path.isdir(os.path.join(version_path, item))]
-        versions.remove('backup')
-
-        self.version_file_CB.addItems(versions)
+        
+        if len(versions) is 0:
+            self.version_file_CB.addItems(["No Version Found"])
+        else:
+            versions.sort(reverse=True)
+            versions.remove('backup')
+            self.version_file_CB.addItems(versions)
 
     def open_version(self):
-        print("open file")
+        #Get the file dir 
+        #Get Current Data
+        sel_show = self.project_cB.currentText()
+        sel_seq = self.seq_cB.currentText()
+        sel_shot = self.shot_cB.currentText()
+        tool = self.tools_cB.currentText()
+        version = self.version_file_CB.currentText()
+
+        version_file_path = os.path.join(studio_dir,sel_show,sel_seq,sel_shot,tool,"scene",version)
+        print(tool,version_file_path)
+
+        #Open Software with file
+        import subprocess
+        subprocess.Popen([tooldata[tool], version_file_path])
+        # print("opening version")
 
     def set_dir(self):
-        show = self.shot_cB.currentText()
+        show = self.project_cB.currentText()
         seq = self.seq_cB.currentText()
         shot = self.shot_cB.currentText()
         studio_dir.replace('\\','/')
@@ -313,8 +332,6 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
                 env.write(var +"="+ "\"" + data + "/" + "\"" + "\n")
 
     
-
-
     #open DCCs
     def opentool(self):
         toolname = self.tools_cB.currentText()
