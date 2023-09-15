@@ -162,8 +162,7 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         self.project_cB.setCurrentText(curr_show)
         self.seq_cB.setCurrentText(curr_seq)
         self.shot_cB.setCurrentText(curr_shot)
-        # print(curr_show,curr_shot)
-        print(current_dir)
+      
 
     #populate project dirs
     def populate_project(self):
