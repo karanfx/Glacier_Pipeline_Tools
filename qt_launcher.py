@@ -12,6 +12,7 @@ import PySide6.QtWidgets
 from utils.google_sheet_api import get_status
 from utils.create_project_dirs import create_shot_dirs,create_libs
 
+
 #Import UIs
 import ui.main_ui_7_ui as main_ui
 import ui.create_project_ui
@@ -60,6 +61,8 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         self.launch_button.clicked.connect(self.opentool)
         self.manual_toolButton.clicked.connect(self.manual_dir)
 
+        #Launch Version
+        self.launch_version_button.clicked.connect(self.setup_env)
         self.launch_version_button.clicked.connect(self.open_version)
 
 
@@ -242,44 +245,7 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
     def toolssetup(self):
         self.tools_cB.addItems(tooldata)
         
-    #Collect Selected Shot Data
     def setup_env(self):
-        env_file = "C:/Users/PERMAN/Documents/houdini18.5/houdini.env"
-        search_text = "# Glacier Variables"
-        num_var = 6
-        
-        #Cleanup the file
-       # Read the file content into a list of lines
-        with open(env_file, 'r') as file:
-            lines = file.readlines()
-
-        # Create an empty list to store the modified content
-        modified_lines = []
-
-        i = 0
-        while i < len(lines):
-            line = lines[i]
-
-            if search_text in line:
-                # Found the search text, add it to the modified content
-                modified_lines.append(line)
-
-                # Skip the next lines_to_delete lines
-                for _ in range(num_var):
-                    i += 1
-            else:
-                modified_lines.append(line)
-
-            i += 1
-
-        # Write the modified content back to the file
-        with open(env_file, 'w') as file:
-            file.writelines(modified_lines)
-
-        print(f"Deleted {num_var} lines after each occurrence of '{search_text}'.")
-
-
-
         #Setup Variables
         toolname = self.tools_cB.currentText()
         proj = self.project_cB.currentText()
@@ -288,15 +254,14 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         shot_dir = self.manual_path_Ldit.text()
         shot_dir = shot_dir.replace("\\","/")
 
-        job = os.path.join(shot_dir,toolname)
+    
+        start_frame = 1001
+        end_frame = 1200
+        if toolname == "Houdini":
+            from utils.houdini.launch_houdini import setup_env as setup_houdini_env
 
-        #Set env variables
+            setup_houdini_env(toolname,proj,seq,shot,shot_dir,start_frame,end_frame)
 
-        variables = {"SHOW" : proj, "SEQ": seq, "SHOT":shot,"SHOT_DIR":shot_dir,"JOB":job}
-        with open(env_file,"a") as env:
-            env.write("# Glacier Variables\n")
-            for var,data in variables.items():
-                env.write(var +"="+ "\"" + data + "/" + "\"" + "\n")
 
     #open DCCs
     def opentool(self):
@@ -311,21 +276,6 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         # print(str(toolname))
         os.startfile(tooldata[toolname]) 
 
-        if toolname == "Houdini_CLI":
-            #open def scene
-            command = tooldata[toolname]
-            # print(command)
-            command += "hscript E:/Work/python_dev/QT_project_launcher/bin/def_scenes/hou_default.hip"
-            #set variables 
-            from utils.houdini.set_shot_def import set_hou_shot_def
-            set_hou_shot_def(proj,seq,shot,username,shot_dir,1001,1200)
-
-            command += 'hython -c "import sys; sys.path.append("E:/Work/python_dev/QT_project_launcher/utils/hou_utils/");'
-            command += 'import set_hou_shot_def; set_hou_shot_def(proj,seq,shot,username,shot_dir,1001,1200)'
-            # command += "python E:/Work/python_dev/QT_project_launcher/utils/hou_utils/set_shot_def.py"
-            #save scene in shot dir
-
-            os.system(command)
 
 
 #Populating other UIs/Dailog

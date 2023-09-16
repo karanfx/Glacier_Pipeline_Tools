@@ -1,3 +1,6 @@
+
+#THIS NEED TO BE IMPLEMENTED INTO SETUP WIZARD
+
 #setting up studio and dcc directories
 from PySide6 import QtWidgets 
 import PySide6.QtGui
