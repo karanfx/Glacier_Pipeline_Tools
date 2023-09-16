@@ -36,7 +36,7 @@ def set_hou_shot_def(show_name,seq_name,shot_name,user_name,shot_dir,start_frame
         # Set the environment variable
         hou.hscript("setenv {}={}".format(var_name, var_val))
 
-        print("Environment variable {} set to: {}".format(var_name, hou.getenv(var_name)))
+        # print("Environment variable {} set to: {}".format(var_name, hou.getenv(var_name)))
 
     #set shot range
     hou.playbar.setFrameRange(start_frame, end_frame)

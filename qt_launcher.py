@@ -12,14 +12,12 @@ import PySide6.QtWidgets
 from utils.google_sheet_api import get_status
 from utils.create_project_dirs import create_shot_dirs,create_libs
 
-
-
 #Import UIs
 import ui.main_ui_7_ui as main_ui
 import ui.create_project_ui
 import ui.add_software_ui
 import ui.about_page
-import ui.report_form
+# import ui.report_form
 
 #Import userID and tool dirs
 user_json_path = "bin/data/user.json"
@@ -33,11 +31,6 @@ studio_dir = userdata.get('studiodir')
 tooldata = user_json.get('tools')
 # print(tooldata)
 
-
-#required data paths to refer
-# tooldir = json.load(open('bin/data/softpaths.json'))
-# jsonpath = "bin/data/softpaths.json"
-# username = "Karan"
 
 
 class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
@@ -132,7 +125,7 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
             task.pop(3)
             
             task = task[1:]
-            print(task)
+            # print(task)
             # print(list(shot))
             item = QtWidgets.QTreeWidgetItem(list(task))
             self.dir_tree_widget.addTopLevelItem(item)
@@ -205,7 +198,7 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         versions = os.listdir(version_path)
         # versions = [item for item in os.listdir(version_path) if os.path.isdir(os.path.join(version_path, item))]
         
-        if len(versions) is 0:
+        if len(versions) == 0:
             self.version_file_CB.addItems(["No Version Found"])
         else:
             versions.sort(reverse=True)
@@ -222,7 +215,7 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         version = self.version_file_CB.currentText()
 
         version_file_path = os.path.join(studio_dir,sel_show,sel_seq,sel_shot,tool,"scene",version)
-        print(tool,version_file_path)
+        # print(tool,version_file_path)
 
         #Open Software with file
         import subprocess
@@ -245,32 +238,7 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         if not man_path:
             QtWidgets.QMessageBox.about(self,"Path Required","Please, pick the path")
 
-    #Calling Create Project UI
-    def create_project(self):
-        import utils.custom_proj as proj
-        dlg = proj.local_proj_dialog()
-        dlg.exec()
-
-    #Calling Add Software UI
-    def setup_dirs(self):
-        
-        import utils.setup_dirs
-        dlg = utils.setup_dirs.setup_dailog()
-        dlg.exec()
-
-    #Calling About Page
-    def about_page(self):
-        dlg = about_page()
-        dlg.exec()
-
-    #Calling Report Form
-    def report(self):
-        import utils.report_emailer as report
-        dlg = report.report_form()
-        # dlg.setStyleSheet(qdarkstyle.load_stylesheet(qt_api = 'PySide6'))
-        
-        dlg.exec()
-
+    #Populate tools
     def toolssetup(self):
         self.tools_cB.addItems(tooldata)
         
@@ -330,7 +298,6 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
             for var,data in variables.items():
                 env.write(var +"="+ "\"" + data + "/" + "\"" + "\n")
 
-    
     #open DCCs
     def opentool(self):
         toolname = self.tools_cB.currentText()
@@ -347,10 +314,10 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         if toolname == "Houdini_CLI":
             #open def scene
             command = tooldata[toolname]
-            print(command)
+            # print(command)
             command += "hscript E:/Work/python_dev/QT_project_launcher/bin/def_scenes/hou_default.hip"
             #set variables 
-            from utils.hou_utils.set_shot_def import set_hou_shot_def
+            from utils.houdini.set_shot_def import set_hou_shot_def
             set_hou_shot_def(proj,seq,shot,username,shot_dir,1001,1200)
 
             command += 'hython -c "import sys; sys.path.append("E:/Work/python_dev/QT_project_launcher/utils/hou_utils/");'
@@ -360,20 +327,38 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
 
             os.system(command)
 
+
+#Populating other UIs/Dailog
+
+    #Calling Create Project UI
+    def create_project(self):
+        import utils.custom_proj as proj
+        dlg = proj.local_proj_dialog()
+        dlg.exec()
+
+    #Calling Add Software UI
+    def setup_dirs(self):
         
-#About Page
-class about_page(ui.about_page.Ui_Dialog,QtWidgets.QDialog):
-    def __init__(self):
-        super(about_page,self).__init__()
-        self.setupUi(self)
-        self.setWindowTitle("About")
-        self.setWindowIcon(PySide6.QtGui.QIcon("bin/logo/favicon_sq_small.png"))
+        import utils.setup_dirs
+        dlg = utils.setup_dirs.setup_dailog()
+        dlg.exec()
 
-        #set darkmode
-        self.setStyleSheet(qdarkstyle.load_stylesheet())                    
-    
+    #Calling About Page UI
+    def about_page(self):
+        import utils.about_page
+        dlg = utils.about_page.about_page()
+        dlg.exec()
+
+    #Calling Report Form UI
+    def report(self):
+        import utils.report_emailer as report
+        dlg = report.report_form()
+        dlg.setStyleSheet(qdarkstyle.load_stylesheet(qt_api = 'PySide6'))
+        
+        dlg.exec()
 
 
+#Execute App
 if __name__ == '__main__':
     app = QtWidgets.QApplication()
     appLaunch = qt_launcher()
