@@ -270,6 +270,8 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         seq = self.seq_cB.currentText()
         shot = self.shot_cB.currentText()
         shot_dir = self.manual_path_Ldit.text()
+
+        
         shot_dir.replace("\\","/")
         scene_dir = os.path.join(shot_dir,"houdini/scene")
 

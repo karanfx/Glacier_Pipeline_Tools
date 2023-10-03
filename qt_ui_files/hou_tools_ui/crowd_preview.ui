@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>749</width>
-    <height>640</height>
+    <width>785</width>
+    <height>735</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -100,13 +100,6 @@
     <layout class="QHBoxLayout" name="horizontalLayout_5">
      <item>
       <widget class="QWidget" name="clip_preview_WD" native="true"/>
-     </item>
-     <item>
-      <widget class="QScrollBar" name="clip_scroll">
-       <property name="orientation">
-        <enum>Qt::Vertical</enum>
-       </property>
-      </widget>
      </item>
     </layout>
    </item>

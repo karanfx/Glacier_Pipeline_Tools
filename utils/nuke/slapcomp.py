@@ -2,11 +2,11 @@ import nuke
 import os
 
 
-#Get the shot plate
+#Get the shot plate 
 #Get the renders
 #Reformat the renders
-#merge it
-#place a write node
+#merge it - done
+#place a write node - done
 #Write a slapcomp
 
 #print(nuke.env)

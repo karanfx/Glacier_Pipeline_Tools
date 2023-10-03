@@ -17,7 +17,7 @@ class Ui_Crowd_Browser(object):
     def setupUi(self, Crowd_Browser):
         if not Crowd_Browser.objectName():
             Crowd_Browser.setObjectName(u"Crowd_Browser")
-        Crowd_Browser.resize(749, 640)
+        Crowd_Browser.resize(785, 735)
         self.gridLayout_2 = QGridLayout(Crowd_Browser)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
         self.frame = QFrame(Crowd_Browser)
@@ -89,12 +89,6 @@ class Ui_Crowd_Browser(object):
         self.clip_preview_WD.setObjectName(u"clip_preview_WD")
 
         self.horizontalLayout_5.addWidget(self.clip_preview_WD)
-
-        self.clip_scroll = QScrollBar(Crowd_Browser)
-        self.clip_scroll.setObjectName(u"clip_scroll")
-        self.clip_scroll.setOrientation(Qt.Vertical)
-
-        self.horizontalLayout_5.addWidget(self.clip_scroll)
 
 
         self.gridLayout_2.addLayout(self.horizontalLayout_5, 1, 0, 1, 1)
