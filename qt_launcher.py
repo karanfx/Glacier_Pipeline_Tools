@@ -254,13 +254,14 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         shot_dir = self.manual_path_Ldit.text()
         shot_dir = shot_dir.replace("\\","/")
 
+        task = "FX"
     
         start_frame = 1001
         end_frame = 1200
         if toolname == "Houdini":
             from utils.houdini.launch_houdini import setup_env as setup_houdini_env
 
-            setup_houdini_env(toolname,proj,seq,shot,shot_dir,start_frame,end_frame)
+            setup_houdini_env(toolname,proj,seq,shot,task,shot_dir,start_frame,end_frame)
 
 
     #open DCCs

@@ -3,10 +3,10 @@ import os
 
 
 #SetUp ENV Variables
-def setup_env(toolname,proj,seq,shot,shot_dir,start_frame=1001,end_frame=1200):
+def setup_env(toolname,proj,seq,shot,task,shot_dir,start_frame=1001,end_frame=1200):
         env_file = "C:/Users/PERMAN/Documents/houdini18.5/houdini.env"
         search_text = "# Glacier Variables"
-        num_var = 8
+        num_var = 9
         
         #Cleanup the file
        # Read the file content into a list of lines
@@ -37,7 +37,7 @@ def setup_env(toolname,proj,seq,shot,shot_dir,start_frame=1001,end_frame=1200):
         job = os.path.join(shot_dir,toolname)
 
         variables = {"SHOW" : str(proj), "SEQ": str(seq), "SHOT":str(shot),"SHOT_DIR": str(shot_dir),
-                     "JOB":str(job),"G_START": str(start_frame),"G_END": str(end_frame)}
+                     "JOB":str(job),"TASK":str(task),"G_START": str(start_frame),"G_END": str(end_frame)}
         with open(env_file,"a") as env:
             env.write("# Glacier Variables\n")
             for var,data in variables.items():

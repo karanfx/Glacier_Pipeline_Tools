@@ -1,4 +1,4 @@
-import nuke
+# import nuke
 import os
 
 
@@ -31,4 +31,6 @@ def slapcomp(plates,renders,output):
 
     write = nuke.nodes.Write(file=output, inputs=[merge_all])
     # nuke.execute( write, 1, 1 )
-    nuke.scriptSaveAs(filename=save_file, overwrite=- 1)
+    # nuke.scriptSaveAs(filename=save_file, overwrite=- 1)
+
+slapcomp(plate,renders,output)
