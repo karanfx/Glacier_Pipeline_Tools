@@ -5,8 +5,6 @@ from PySide2 import QtGui, QtWidgets, QtCore,QtUiTools
 from PySide2.QtWidgets import QApplication, QMainWindow, QWidget, QGridLayout, QPushButton
 from PySide2.QtGui import QIcon, QPixmap
 
-def copy_data(src_dir,dest_dir):
-    shutil.copytree(src_dir,dest_dir)
 
 
 uifile = "E:/Work/python_dev/QT_project_launcher/qt_ui_files/hou_tools_ui/cache_collector.ui"
@@ -81,6 +79,7 @@ class cache_collector(QtWidgets.QWidget):
                         vers = os.path.dirname(cur_vers)
                         # print(cur_vers)
                         # print(vers)
+
                         #Set Dest Dir
                         dest_path = path.replace('cache','collect_cache')
                         dest_dir = os.path.dirname(dest_path)
