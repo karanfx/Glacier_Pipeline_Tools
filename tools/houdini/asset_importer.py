@@ -33,7 +33,7 @@ def import_alembic(dir):
 def import_usd(dir):
     ext = os.path.splitext(dir)[1]
     name = os.path.basename(dir).replace(ext,"")
-    if ext == ".fbx":
+    if ext == ".usd":
         obj = hou.node("stage/")
         sop_import = obj.createNode("sopimport",name)
         sop_import.parm("savepath").set(dir)
@@ -43,6 +43,7 @@ def import_usd(dir):
 
 
 # layout = "E:/Work/houdinifx/pipe_test/Show01/Seq_AB/Shot_AB001/layout/"
+
 
 uiFile = "E:/Work/python_dev/QT_project_launcher/qt_ui_files/hou_tools_ui/scene_builder.ui"
 
@@ -80,18 +81,19 @@ class scene_builder(QtWidgets.QWidget):
 
     def get_layout_dirs(self):
         shot_dir = os.environ.get('SHOT_DIR')
-        layout = os.path.join(shot_dir,'libs/layout')
-        anim = os.path.join(shot_dir,'libs/anim')
+        layout = os.path.join(shot_dir,'libs','layout')
+        anim = os.path.join(shot_dir,'libs','anim')
         print(layout)
 
 
     def build(self):
-        print("build")
+        # print("build")
         #get layout Dirs
         shot_dir = os.environ.get('SHOT_DIR')
-        layout = os.path.join(shot_dir,'libs/layout')
-        anim = os.path.join(shot_dir,'libs/anim')
-        print(layout)
+        # print(shot_dir)
+        layout = os.path.join(shot_dir,'libs','layout')
+        anim = os.path.join(shot_dir,'libs','anim')
+        # print(layout)
 
         checked = []
         for index in range(self.ui.assets_LW.count()):
@@ -99,24 +101,27 @@ class scene_builder(QtWidgets.QWidget):
             if item.checkState() == 2:
                 checked.append(item.text())
 
-        print(checked)
+        # print(checked)
 
         for sub in os.listdir(layout):
             for item in checked:
                 if item == sub:
+                    print('item',sub)
                     dirs = os.path.join(layout,sub)
-                    print(dirs)
-                    for asset in os.listdir(dirs):
-                        asset_dirs = os.path.join(dirs,asset)
-                        ext = os.path.splitext(asset_dirs)[1]
-                        name = os.path.basename(asset_dirs).replace(ext,"")
-                        print(name)
+                    print('dirs',dirs)
+                    # for asset in os.listdir(dirs):
+                    #    asset_dirs = os.path.join(dirs,asset)
+                    asset_dirs = dirs
+                    ext = os.path.splitext(asset_dirs)[1]
+                    name = os.path.basename(asset_dirs).replace(ext,"")
+                    print('name',name)
+                    print('asset_dir',asset_dirs)
 
-                        #call imports
-                        import_alembic(asset_dirs)
-                        import_fbx(asset_dirs)
-                        import_usd(asset_dirs)
-                        print(asset_dirs)
+                    #call imports
+                    import_alembic(asset_dirs)
+                    import_fbx(asset_dirs)
+                    import_usd(asset_dirs)
+                    print(asset_dirs)
 
         #Setup Frame Range 
         start_frame = int(os.environ.get('G_START'))
