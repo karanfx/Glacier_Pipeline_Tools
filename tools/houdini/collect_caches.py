@@ -120,11 +120,13 @@ class cache_collector(QtWidgets.QWidget):
                         vers = os.path.dirname(cur_vers)
                         print(cur_vers)
                         print(vers)
+                        
                         #Set Dest Dir
                         dest_path = path.replace('cache','collect_cache')
                         dest_dir = os.path.dirname(dest_path)
                         #Copy Data
                         shutil.copytree(cur_vers,dest_dir)
+
                         #Create a replica file cache node
                         parent = child.parent()
                         node_path = parent.path()
@@ -132,10 +134,45 @@ class cache_collector(QtWidgets.QWidget):
                         new_cache_node = parent.createNode('filecache',"collect_" + name)
                         new_cache_node.parm("file").set(dest_path)
 
-
     def cache_cleanup(self):
-        print("cleaning caches..")
+        #Get Selected nodes
+        cache_item = self.ui.cache_data_TW.selectedItems()
+        
+        for item in cache_item:
+            name = item.text(0)
+            count = item.text(1)
+            path = item.text(2)
+            # print(name,count,path)
 
+            if count == "None":
+                #Not Found Message
+                # print('cache not found for {}'.format(name))
+                message = 'Cache not found for {}'.format(name)
+                hou.ui.displayMessage(message, title="Not Found", severity=hou.severityType.Message)
+            else:
+                #find the current cache node 
+                obj = hou.node("/obj")
+                children = obj.allSubChildren()
+        
+                for child in children:
+                    if child.name() == name:
+                        #Copy Data to new Dir 
+                        cur_vers = os.path.dirname(path)
+                        vers = os.path.dirname(cur_vers)
+
+                        # print(cur_vers)
+                        # print(vers)
+                        
+                        for dir in os.listdir(vers): 
+                            dir = os.path.join(vers,dir)
+                            dir = dir.replace("\\","/")
+
+                            #Cache Removed 
+                            if dir != cur_vers:
+                                shutil.rmtree(dir)
+                                print("Cache Removed : ",dir)
+                            else:
+                                print("Sel_version",dir)
 
 win = cache_collector()
 win.show()
