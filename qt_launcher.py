@@ -144,8 +144,8 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
     #Get Selected Task
     def get_tree_sel(self):
         #Get Selection
-        sel_task = self.dir_tree_widget.selectedItems()        
-     
+        sel_task = self.dir_tree_widget.selectedItems()
+             
         current_dir = ""
         for item in sel_task:
             curr_shot = str(item.text(0))

@@ -19,68 +19,75 @@ from PySide6.QtWidgets import (QApplication, QGridLayout, QHeaderView, QLabel,
     QLineEdit, QPushButton, QSizePolicy, QTextEdit,
     QToolButton, QTreeWidget, QTreeWidgetItem, QWidget)
 
-class Ui_Form(object):
-    def setupUi(self, Form):
-        if not Form.objectName():
-            Form.setObjectName(u"Form")
-        Form.resize(641, 622)
-        self.gridLayout = QGridLayout(Form)
+class Ui_publisher_QW(object):
+    def setupUi(self, publisher_QW):
+        if not publisher_QW.objectName():
+            publisher_QW.setObjectName(u"publisher_QW")
+        publisher_QW.resize(519, 451)
+        self.gridLayout = QGridLayout(publisher_QW)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.label_2 = QLabel(Form)
-        self.label_2.setObjectName(u"label_2")
+        self.vers_name_LB = QLabel(publisher_QW)
+        self.vers_name_LB.setObjectName(u"vers_name_LB")
 
-        self.gridLayout.addWidget(self.label_2, 0, 0, 1, 1)
+        self.gridLayout.addWidget(self.vers_name_LB, 0, 0, 1, 1)
 
-        self.lineEdit_2 = QLineEdit(Form)
-        self.lineEdit_2.setObjectName(u"lineEdit_2")
+        self.vers_name_LE = QLineEdit(publisher_QW)
+        self.vers_name_LE.setObjectName(u"vers_name_LE")
 
-        self.gridLayout.addWidget(self.lineEdit_2, 0, 1, 1, 1)
+        self.gridLayout.addWidget(self.vers_name_LE, 0, 1, 1, 1)
 
-        self.label = QLabel(Form)
-        self.label.setObjectName(u"label")
+        self.vers_path_LB = QLabel(publisher_QW)
+        self.vers_path_LB.setObjectName(u"vers_path_LB")
 
-        self.gridLayout.addWidget(self.label, 1, 0, 1, 1)
+        self.gridLayout.addWidget(self.vers_path_LB, 1, 0, 1, 1)
 
-        self.lineEdit = QLineEdit(Form)
-        self.lineEdit.setObjectName(u"lineEdit")
+        self.vers_path_LE = QLineEdit(publisher_QW)
+        self.vers_path_LE.setObjectName(u"vers_path_LE")
 
-        self.gridLayout.addWidget(self.lineEdit, 1, 1, 1, 1)
+        self.gridLayout.addWidget(self.vers_path_LE, 1, 1, 1, 1)
 
-        self.toolButton = QToolButton(Form)
-        self.toolButton.setObjectName(u"toolButton")
+        self.cache_tree_TW = QTreeWidget(publisher_QW)
+        self.cache_tree_TW.setObjectName(u"cache_tree_TW")
 
-        self.gridLayout.addWidget(self.toolButton, 1, 2, 1, 1)
+        self.gridLayout.addWidget(self.cache_tree_TW, 2, 0, 1, 4)
 
-        self.treeWidget = QTreeWidget(Form)
-        self.treeWidget.setObjectName(u"treeWidget")
+        self.notes_LB = QLabel(publisher_QW)
+        self.notes_LB.setObjectName(u"notes_LB")
 
-        self.gridLayout.addWidget(self.treeWidget, 2, 0, 1, 2)
+        self.gridLayout.addWidget(self.notes_LB, 3, 0, 1, 1)
 
-        self.textEdit = QTextEdit(Form)
-        self.textEdit.setObjectName(u"textEdit")
+        self.notes_TE = QTextEdit(publisher_QW)
+        self.notes_TE.setObjectName(u"notes_TE")
 
-        self.gridLayout.addWidget(self.textEdit, 3, 0, 1, 2)
+        self.gridLayout.addWidget(self.notes_TE, 4, 0, 1, 4)
 
-        self.pushButton = QPushButton(Form)
-        self.pushButton.setObjectName(u"pushButton")
-        self.pushButton.setMinimumSize(QSize(0, 30))
+        self.publish_PB = QPushButton(publisher_QW)
+        self.publish_PB.setObjectName(u"publish_PB")
+        self.publish_PB.setMinimumSize(QSize(0, 30))
 
-        self.gridLayout.addWidget(self.pushButton, 4, 0, 1, 1)
+        self.gridLayout.addWidget(self.publish_PB, 5, 3, 1, 1)
+
+        self.vers_path_TB = QToolButton(publisher_QW)
+        self.vers_path_TB.setObjectName(u"vers_path_TB")
+
+        self.gridLayout.addWidget(self.vers_path_TB, 1, 3, 1, 1)
 
 
-        self.retranslateUi(Form)
+        self.retranslateUi(publisher_QW)
 
-        QMetaObject.connectSlotsByName(Form)
+        QMetaObject.connectSlotsByName(publisher_QW)
     # setupUi
 
-    def retranslateUi(self, Form):
-        Form.setWindowTitle(QCoreApplication.translate("Form", u"Form", None))
-        self.label_2.setText(QCoreApplication.translate("Form", u"Version Name :", None))
-        self.label.setText(QCoreApplication.translate("Form", u"Version Path :", None))
-        self.toolButton.setText(QCoreApplication.translate("Form", u"...", None))
-        ___qtreewidgetitem = self.treeWidget.headerItem()
-        ___qtreewidgetitem.setText(1, QCoreApplication.translate("Form", u"Path", None));
-        ___qtreewidgetitem.setText(0, QCoreApplication.translate("Form", u"Cache", None));
-        self.pushButton.setText(QCoreApplication.translate("Form", u"Publish", None))
+    def retranslateUi(self, publisher_QW):
+        publisher_QW.setWindowTitle(QCoreApplication.translate("publisher_QW", u"Form", None))
+        self.vers_name_LB.setText(QCoreApplication.translate("publisher_QW", u"Version Name :", None))
+        self.vers_path_LB.setText(QCoreApplication.translate("publisher_QW", u"Version Path :", None))
+        ___qtreewidgetitem = self.cache_tree_TW.headerItem()
+        ___qtreewidgetitem.setText(2, QCoreApplication.translate("publisher_QW", u"Path", None));
+        ___qtreewidgetitem.setText(1, QCoreApplication.translate("publisher_QW", u"Type", None));
+        ___qtreewidgetitem.setText(0, QCoreApplication.translate("publisher_QW", u"Cache", None));
+        self.notes_LB.setText(QCoreApplication.translate("publisher_QW", u"Notes :", None))
+        self.publish_PB.setText(QCoreApplication.translate("publisher_QW", u"Publish", None))
+        self.vers_path_TB.setText(QCoreApplication.translate("publisher_QW", u"...", None))
     # retranslateUi
 
