@@ -6,23 +6,16 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>519</width>
-    <height>451</height>
+    <width>696</width>
+    <height>452</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="0" column="0">
-    <widget class="QLabel" name="vers_name_LB">
-     <property name="text">
-      <string>Version Name :</string>
-     </property>
-    </widget>
-   </item>
-   <item row="0" column="1">
-    <widget class="QLineEdit" name="vers_name_LE"/>
+   <item row="1" column="1">
+    <widget class="QLineEdit" name="vers_path_LE"/>
    </item>
    <item row="1" column="0">
     <widget class="QLabel" name="vers_path_LB">
@@ -31,8 +24,8 @@
      </property>
     </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="QLineEdit" name="vers_path_LE"/>
+   <item row="0" column="1">
+    <widget class="QLineEdit" name="vers_name_LE"/>
    </item>
    <item row="2" column="0" colspan="4">
     <widget class="QTreeWidget" name="cache_tree_TW">
@@ -53,16 +46,6 @@
      </column>
     </widget>
    </item>
-   <item row="3" column="0">
-    <widget class="QLabel" name="notes_LB">
-     <property name="text">
-      <string>Notes :</string>
-     </property>
-    </widget>
-   </item>
-   <item row="4" column="0" colspan="4">
-    <widget class="QTextEdit" name="notes_TE"/>
-   </item>
    <item row="5" column="3">
     <widget class="QPushButton" name="publish_PB">
      <property name="minimumSize">
@@ -76,10 +59,27 @@
      </property>
     </widget>
    </item>
+   <item row="0" column="0">
+    <widget class="QLabel" name="vers_name_LB">
+     <property name="text">
+      <string>Version Name :</string>
+     </property>
+    </widget>
+   </item>
    <item row="1" column="3">
     <widget class="QToolButton" name="vers_path_TB">
      <property name="text">
       <string>...</string>
+     </property>
+    </widget>
+   </item>
+   <item row="4" column="0" colspan="4">
+    <widget class="QTextEdit" name="notes_TE"/>
+   </item>
+   <item row="3" column="0">
+    <widget class="QLabel" name="notes_LB">
+     <property name="text">
+      <string>Notes :</string>
      </property>
     </widget>
    </item>

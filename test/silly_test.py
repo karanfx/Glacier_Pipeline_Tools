@@ -24,4 +24,8 @@ def seq_converter(ffmpeg_path,input_seq,output_dir):
         print("Error:", e)
 
 
-seq_converter("ffmpeg","D:/test_seq/v004/test_seq.%04d.png","D:/test_seq/test_explosion_v016.mp4")
+# seq_converter("ffmpeg","D:/test_seq/v004/test_seq.%04d.png","D:/test_seq/test_explosion_v016.mp4")
+
+import datetime
+time = datetime.datetime.now()
+print(str(time.strftime("%Y-%m-%d  %H:%M:%S")))
