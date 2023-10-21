@@ -82,7 +82,8 @@ class Ui_publisher_QW(object):
         publisher_QW.setWindowTitle(QCoreApplication.translate("publisher_QW", u"Form", None))
         self.vers_path_LB.setText(QCoreApplication.translate("publisher_QW", u"Version Path :", None))
         ___qtreewidgetitem = self.cache_tree_TW.headerItem()
-        ___qtreewidgetitem.setText(2, QCoreApplication.translate("publisher_QW", u"Path", None));
+        ___qtreewidgetitem.setText(3, QCoreApplication.translate("publisher_QW", u"Path", None));
+        ___qtreewidgetitem.setText(2, QCoreApplication.translate("publisher_QW", u"File Count", None));
         ___qtreewidgetitem.setText(1, QCoreApplication.translate("publisher_QW", u"Type", None));
         ___qtreewidgetitem.setText(0, QCoreApplication.translate("publisher_QW", u"Cache", None));
         self.publish_PB.setText(QCoreApplication.translate("publisher_QW", u"Publish", None))

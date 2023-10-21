@@ -4,28 +4,25 @@
 # print(cur_shot)
 
 # print('Launch through subprocess')
+vers = "v002"
+# n_vers = vers + 1
 
-#converting image seq into video
-def seq_converter(ffmpeg_path,input_seq,output_dir):
-    import subprocess
-    ffmpeg_command = [
-        "ffmpeg",
-        "-framerate", "24",
-        "-i", input_seq,
-        "-c:v", "libx264",
-        "-vf", "fps=24",
-        output_dir
-    ]
+import os
+import re
+versions = os.listdir("D:/test_studio/Show01/Seq_AB/Shot_AB001/libs/fx")
 
-    try:
-        subprocess.run(ffmpeg_command, check=True)
-        print("Image sequence converted to video successfully.")
-    except subprocess.CalledProcessError as e:
-        print("Error:", e)
+numbers = [int(re.search(r'\d+', name).group(0)) for name in versions if re.search(r'\d+', name)]
 
+l = ["v001","v004","v005","v006"]
+max_v = str(max(l))
+max_v = max_v.strip('v')
+print(int(max_v)+1)
 
-# seq_converter("ffmpeg","D:/test_seq/v004/test_seq.%04d.png","D:/test_seq/test_explosion_v016.mp4")
-
-import datetime
-time = datetime.datetime.now()
-print(str(time.strftime("%Y-%m-%d  %H:%M:%S")))
+max_v = str(max(l))
+max_v = int(max_v.strip('v')) +1
+print(int(max_v)+1)
+vers_up = f"v{max_v:03d}"
+print(vers_up)
+# print(max(versions))
+# print(versions[-1])
+# print(numbers)
