@@ -1,10 +1,17 @@
 import json
 import os
 
-studiodir = "D:/test_studio"
-username = 'Karan'
+#Import userID and tool dirs
+user_json_path = "bin/data/user.json"
+with open(user_json_path,"r") as uf:
+    user_json = json.load(uf)
+userdata = user_json.get('User_Data')
 
-# from google_sheet_api import get_status
+username = userdata.get('user')
+studio_dir = userdata.get('studiodir')
+
+tooldata = user_json.get('tools')
+# print(tooldata)
 
 def create_shot_dirs(studiodir):
     with open("bin\data\shot_status.json") as f:
@@ -23,7 +30,7 @@ def create_shot_dirs(studiodir):
         seq_name = task[seq_idx]
         shot_name = task[shot_idx]
         # print(show_name,seq_name,shot_name)
-        shotdir = os.path.join(studiodir,show_name,seq_name,shot_name)
+        shotdir = os.path.join(studiodir,show_name,seq_name,shot_name,username)
         # print(shotdir)
         
 
@@ -39,13 +46,8 @@ def create_shot_dirs(studiodir):
 
 def create_libs(studiodir):
     libs = "libs"
-    # #studio libs
-    # studio_lib = os.path.join(studiodir,libs)
-    # if not os.path.isdir(studio_lib):
-    #     os.mkdir(studio_lib)
-
+   
     #show libs 
-
     with open("bin\data\shot_status.json") as f:
         data = json.load(f)
 
@@ -80,9 +82,7 @@ def create_libs(studiodir):
             os.mkdir(shot_lib)
  
 
-    
-    
-
-
-# create_libs(studiodir)
-# create_shot_dirs(studiodir)
+# print(studio_dir)
+# print(username)
+# create_libs(studio_dir)
+# create_shot_dirs(studio_dir)

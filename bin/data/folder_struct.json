@@ -1,6 +1,6 @@
 {   
     "layout" : ["cam","char","track"],
-    "anim" : ["anim_char","guides"],
+    "maya" : ["scene","cache","playblast","renders"],
     "houdini" : ["scene","cache","flipbook","opengl","renders","geo","dependency"],
     "nuke" : ["scene","renders","prep","footage"],
     "client" : ["received","sent"],

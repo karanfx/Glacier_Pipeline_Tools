@@ -28,9 +28,9 @@ def get_status(username):
 
     #Save Json File
     with open("bin/data/shot_status.json", "w") as file:
-        json.dump(data,file)     
+        json.dump(data,file,indent=4)     
 
-# get_status("Karan")
+get_status("Karan")
 # print(col)
 
 

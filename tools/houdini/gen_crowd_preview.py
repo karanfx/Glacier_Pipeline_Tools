@@ -82,3 +82,91 @@ for char in os.listdir(char_path):
                 print(clip)
 
                 # fbx_preview(char_dir,clip,prev_dir,trans,rot)
+
+
+
+#Another Version of fbx capture
+import os
+import hou
+
+def captureFbx(fbxPath, cameraDistance=350):
+
+    
+    # fbx_dir = os.path.join(fbxPath,fbx)
+    par_dir = os.path.dirname(os.path.dirname(fbxPath))
+    import pprint
+    pprint.pprint(par_dir)
+    # Import fbx
+    subnet = hou.hipFile.importFBX(file_name=fbxPath, import_geometry=True)
+    subnet = subnet[0]
+
+    sub_name = subnet.name()
+    
+    
+    print(sub_name)
+    flpbk_dir = os.path.join(par_dir,sub_name,"render")
+    pprint.pprint(fbxPath)
+
+
+    # # Turn off joint viz
+    # for node in subnet.children():
+    #     if 'bone' in node.name():
+    #         node.setDisplayFlag(0)
+
+    # Get main joint (usually Hips)
+    rootJntNode = ''
+    for node in subnet.children():
+        if 'Hips' in node.name():
+            rootJntNode = node
+            break
+
+
+    # Create camera and constrain to fbx
+    if rootJntNode:
+        mainJntTxPath = rootJntNode.parm('tx').path()
+        mainJntTyHieght = rootJntNode.parm('ty').eval()
+        mainJntTzPath = rootJntNode.parm('tz').path()
+
+        cam = hou.node('/obj').createNode('cam')
+        cam.parm('tx').setExpression('ch("%s") + %d' % (mainJntTxPath, int(cameraDistance)))
+        cam.parm('ty').set(mainJntTyHieght)
+        cam.parm('tz').setExpression('ch("%s") + %d' % (mainJntTzPath, int(cameraDistance)))
+        cam.parm('ry').set(45)
+
+        # Add openGL
+        openGl =  hou.node('/out').createNode('opengl')
+
+        hou.playbar.setFrameRange(1,50)
+        # set frame range
+        openGl.parm('trange').set(1)
+        frameRange = hou.playbar.playbackRange()
+        openGl.parm('/out/opengl1/f1').set(frameRange[0])
+        openGl.parm('/out/opengl1/f2').set(frameRange[1])
+
+        # set fbx path as comment
+        openGl.parm('/out/opengl1/vpcomment').set(fbxPath)
+        openGl.parm('/out/opengl1/tres').set(1)
+        openGl.parmTuple('/out/opengl1/res').set((720, 720))
+
+
+        # make images path
+        out_name = sub_name + ".$F4.jpeg"
+        outputPath = os.path.join(flpbk_dir,out_name).replace("\\","/")
+        openGl.parm('/out/opengl1/picture').set(outputPath)
+
+        openGl.parm('aamode').set(3)
+        openGl.parm('/out/opengl1/shadingmode').set(0)
+        openGl.parm('/out/opengl1/execute').pressButton()
+
+        
+fbxPath = "D:/test_studio/Show01/libs/crowd/character/fbx/draw sword 1.fbx"
+fbx_dirs = "D:/test_studio/Show01/libs/crowd/character/fbx/"
+
+
+# # fbx_dir = os.path.join(fbx_dirs,fbx)
+# par_dir = os.path.dirname(os.path.dirname(fbx_dirs))
+# import pprint
+# # pprint.pprint(fbx_dir)
+# pprint.pprint(par_dir)
+
+captureFbx(fbxPath, cameraDistance=350)

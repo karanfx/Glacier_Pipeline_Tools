@@ -32,6 +32,16 @@ studio_dir = userdata.get('studiodir')
 tooldata = user_json.get('tools')
 # print(tooldata)
 
+# #Import shot status 
+# shot_status = "bin/data/shot_status.json"
+# with open(shot_status,"r") as st:
+#     shot_stat = json.load(st)
+# userdata = shot_stat.get('User_Data')
+
+# username = userdata.get('user')
+# studio_dir = userdata.get('studiodir')
+
+# tooldata = user_json.get('tools')
 
 
 class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
@@ -53,13 +63,13 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         #Populate Combo Boxs
         self.project_cB.currentTextChanged.connect(self.populate_seq)
         self.seq_cB.currentTextChanged.connect(self.populate_shot)
-        self.shot_cB.currentTextChanged.connect(self.set_dir)
+        self.shot_cB.currentTextChanged.connect(self.set_manual_dir)
         self.tools_cB.currentTextChanged.connect(self.populate_versions)
 
         #Launch apps
         self.launch_button.clicked.connect(self.setup_env)
         self.launch_button.clicked.connect(self.opentool)
-        self.manual_toolButton.clicked.connect(self.manual_dir)
+        self.manual_toolButton.clicked.connect(self.pick_manual_dir)
 
         #Launch Version
         self.launch_version_button.clicked.connect(self.setup_env)
@@ -93,7 +103,6 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         self.populate_project()
         self.populate_seq()
         self.populate_shot()
-
         self.populate_versions()
 
 
@@ -115,6 +124,9 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         show_idx = data[0].index('Show')
         seq_idx = data[0].index('Sequence')
         shot_idx = data[0].index('Shot')
+        # start_frame_idx = data[0].index('Start Date')
+        # end_frame_idx = data[0].index('End Date')
+
         # print(show_idx,seq_idx,shot_idx)
 
         data = data[1:]
@@ -196,7 +208,7 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         sel_shot = self.shot_cB.currentText()
         tool = self.tools_cB.currentText()
 
-        version_path = os.path.join(studio_dir,sel_show,sel_seq,sel_shot,tool,"scene")
+        version_path = os.path.join(studio_dir,sel_show,sel_seq,sel_shot,username,tool,"scene")
         # print(os.listdir(version_path))
         versions = os.listdir(version_path)
         # versions = [item for item in os.listdir(version_path) if os.path.isdir(os.path.join(version_path, item))]
@@ -204,8 +216,9 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         if len(versions) == 0:
             self.version_file_CB.addItems(["No Version Found"])
         else:
+            # versions.remove('backup')
             versions.sort(reverse=True)
-            versions.remove('backup')
+            
             self.version_file_CB.addItems(versions)
 
     def open_version(self):
@@ -225,7 +238,7 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         subprocess.Popen([tooldata[tool], version_file_path])
         # print("opening version")
 
-    def set_dir(self):
+    def set_manual_dir(self):
         show = self.project_cB.currentText()
         seq = self.seq_cB.currentText()
         shot = self.shot_cB.currentText()
@@ -233,7 +246,7 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
 
         self.manual_path_Ldit.setText(os.path.join(studio_dir,show,seq,shot))
 
-    def manual_dir(self):
+    def pick_manual_dir(self):
         man_path,ext = QtWidgets.QFileDialog.getOpenFileName(self,'Select Folder')
         if man_path:
             self.manual_path_Ldit.setText(man_path)
@@ -261,7 +274,18 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         if toolname == "Houdini":
             from utils.houdini.launch_houdini import setup_env as setup_houdini_env
 
-            setup_houdini_env(toolname,proj,seq,shot,task,shot_dir,start_frame,end_frame)
+            setup_houdini_env(toolname,username,proj,seq,shot,task,shot_dir,start_frame,end_frame)
+
+        if toolname == "Maya":
+            from utils.maya.launch_maya import setup_env as setup_maya_env
+
+            setup_maya_env(toolname,username,proj,seq,shot,task,shot_dir,start_frame,end_frame)
+
+        
+        if toolname == "Nuke":
+            from utils.nuke.launch_nuke import setup_env as setup_nuke_env
+
+            setup_nuke_env(toolname,username,proj,seq,shot,task,shot_dir,start_frame,end_frame)
 
 
     #open DCCs
@@ -278,8 +302,6 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
 
         # print(str(toolname))
         os.startfile(tooldata[toolname]) 
-
-
 
 #Populating other UIs/Dailog
 
