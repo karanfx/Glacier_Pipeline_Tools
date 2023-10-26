@@ -66,14 +66,14 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         self.shot_cB.currentTextChanged.connect(self.set_manual_dir)
         self.tools_cB.currentTextChanged.connect(self.populate_versions)
 
-        #Launch apps
-        self.launch_button.clicked.connect(self.setup_env)
-        self.launch_button.clicked.connect(self.opentool)
         self.manual_toolButton.clicked.connect(self.pick_manual_dir)
 
+
+        #Launch apps
+        self.launch_button.clicked.connect(self.OpenBlankDCC)
+
         #Launch Version
-        self.launch_version_button.clicked.connect(self.setup_env)
-        self.launch_version_button.clicked.connect(self.open_version)
+        self.launch_version_button.clicked.connect(self.OpenVersion)
 
 
         #Set Action Menu
@@ -105,12 +105,11 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         self.populate_shot()
         self.populate_versions()
 
-
+#POPULATE DATA
     #Toggle Dark Mode
     def toggle_dark(self):
         self.setStyleSheet(qdarkstyle.load_stylesheet(qt_api = 'PySide6'))
         
-
     #Get Data from Sheet
     def populate_status(self):
         self.dir_tree_widget.clear()
@@ -124,8 +123,8 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         show_idx = data[0].index('Show')
         seq_idx = data[0].index('Sequence')
         shot_idx = data[0].index('Shot')
-        # start_frame_idx = data[0].index('Start Date')
-        # end_frame_idx = data[0].index('End Date')
+        start_frame_idx = data[0].index('Start Date')
+        end_frame_idx = data[0].index('End Date')
 
         # print(show_idx,seq_idx,shot_idx)
 
@@ -171,7 +170,24 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         self.seq_cB.setCurrentText(curr_seq)
         self.shot_cB.setCurrentText(curr_shot)
       
+    #Get all Inputs
+    def get_inputs(self):
+        sel_show = self.project_cB.currentText()
+        sel_seq = self.seq_cB.currentText()
+        sel_shot = self.shot_cB.currentText()
+        manual_dir = self.manual_path_Ldit.text()
+        tool = self.tools_cB.currentText()
+        version = self.version_file_CB.currentText()
+        shot_dir =  os.path.join(studio_dir,sel_show,sel_seq,sel_shot,username)
+        shot_dir = shot_dir.replace("\\","/")
+        version_path  = os.path.join(studio_dir,sel_show,sel_seq,sel_shot,username,tool,"scene",version)
 
+        UI_inputs = {"SHOW" : sel_show,"SEQ":sel_seq,"SHOT":sel_shot,
+                     "TOOL":tool, "VERSION":version, "MANUAL_DIR":manual_dir,
+                     "SHOT_DIR":shot_dir ,"VERSION_PATH":version_path }
+
+        return UI_inputs
+    
     #populate project dirs
     def populate_project(self):
         prodirs = [ name for name in os.listdir(studio_dir) if os.path.isdir(os.path.join(studio_dir, name)) ]
@@ -221,30 +237,16 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
             
             self.version_file_CB.addItems(versions)
 
-    def open_version(self):
-        #Get the file dir 
-        #Get Current Data
-        sel_show = self.project_cB.currentText()
-        sel_seq = self.seq_cB.currentText()
-        sel_shot = self.shot_cB.currentText()
-        tool = self.tools_cB.currentText()
-        version = self.version_file_CB.currentText()
-
-        version_file_path = os.path.join(studio_dir,sel_show,sel_seq,sel_shot,tool,"scene",version)
-        # print(tool,version_file_path)
-
-        #Open Software with file
-        import subprocess
-        subprocess.Popen([tooldata[tool], version_file_path])
-        # print("opening version")
-
     def set_manual_dir(self):
-        show = self.project_cB.currentText()
-        seq = self.seq_cB.currentText()
-        shot = self.shot_cB.currentText()
-        studio_dir.replace('\\','/')
+        inputs = self.get_inputs()
+        show = inputs.get("SHOW")
+        seq = inputs.get("SEQ")
+        shot = inputs.get("SHOT")
+        
+        man_dir = os.path.join(studio_dir,show,seq,shot)
+        man_dir = man_dir.replace('\\','/')
 
-        self.manual_path_Ldit.setText(os.path.join(studio_dir,show,seq,shot))
+        self.manual_path_Ldit.setText(man_dir)
 
     def pick_manual_dir(self):
         man_path,ext = QtWidgets.QFileDialog.getOpenFileName(self,'Select Folder')
@@ -258,50 +260,53 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
     def toolssetup(self):
         self.tools_cB.addItems(tooldata)
         
-    def setup_env(self):
-        #Setup Variables
-        toolname = self.tools_cB.currentText()
-        proj = self.project_cB.currentText()
-        seq = self.seq_cB.currentText()
-        shot = self.shot_cB.currentText()
-        shot_dir = self.manual_path_Ldit.text()
-        shot_dir = shot_dir.replace("\\","/")
+
+    #Open Blank DCCs and setup env Variables
+    def OpenBlankDCC(self):
+        inputs = self.get_inputs()
+        toolname = inputs.get("TOOL")
 
         task = "FX"
-    
         start_frame = 1001
         end_frame = 1200
-        if toolname == "Houdini":
-            from utils.houdini.launch_houdini import setup_env as setup_houdini_env
 
-            setup_houdini_env(toolname,username,proj,seq,shot,task,shot_dir,start_frame,end_frame)
+        #Write ENV VARIABLES
+        job = os.path.join(inputs.get("SHOT_DIR"),toolname)
 
-        if toolname == "Maya":
-            from utils.maya.launch_maya import setup_env as setup_maya_env
+        env_variables = {"USER":str(username),"SHOW" : str(inputs.get("SHOW")), "SEQ": str(inputs.get("SEQ")), 
+                         "SHOT":str(inputs.get("SHOT")),"SHOT_DIR": str(inputs.get("SHOT_DIR")),
+                        "JOB":str(job),"TASK":str(task),"G_START": str(start_frame),"G_END": str(end_frame)}
+      
 
-            setup_maya_env(toolname,username,proj,seq,shot,task,shot_dir,start_frame,end_frame)
+        #Open Software with file
+        import subprocess
+        subprocess.Popen([tooldata[toolname]], env={**os.environ, **env_variables})
 
+    #Open Versions with respective DCC and setup env Variables
+    def OpenVersion(self):
+        #Get the file dir 
+        #Get Current Data
+        inputs = self.get_inputs()
+        tool = inputs.get("TOOL")
         
-        if toolname == "Nuke":
-            from utils.nuke.launch_nuke import setup_env as setup_nuke_env
+        version_file_path = inputs.get("VERSION_PATH")
 
-            setup_nuke_env(toolname,username,proj,seq,shot,task,shot_dir,start_frame,end_frame)
+        task = "FX"
+        start_frame = 1001
+        end_frame = 1200
 
+        #Write ENV VARIABLES
+        job = os.path.join(inputs.get("SHOT_DIR"),tool)
 
-    #open DCCs
-    def opentool(self):
-        toolname = self.tools_cB.currentText()
-        proj = self.project_cB.currentText()
-        seq = self.seq_cB.currentText()
-        shot = self.shot_cB.currentText()
-        shot_dir = self.manual_path_Ldit.text()
+        env_variables = {"USER":str(username),"SHOW" : str(inputs.get("SHOW")), "SEQ": str(inputs.get("SEQ")), 
+                         "SHOT":str(inputs.get("SHOT")),"SHOT_DIR": str(inputs.get("SHOT_DIR")),
+                        "JOB":str(job),"TASK":str(task),"G_START": str(start_frame),"G_END": str(end_frame)}
+      
 
-        
-        shot_dir.replace("\\","/")
-        scene_dir = os.path.join(shot_dir,"houdini/scene")
+        #Open Software with file
+        import subprocess
+        subprocess.Popen([tooldata[tool], version_file_path], env={**os.environ, **env_variables})
 
-        # print(str(toolname))
-        os.startfile(tooldata[toolname]) 
 
 #Populating other UIs/Dailog
 

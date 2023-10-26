@@ -2,7 +2,7 @@
 import os
 
 
-#SetUp ENV Variables
+#SetUp ENV Variables hard coded
 def setup_env(toolname,username,proj,seq,shot,task,shot_dir,start_frame=1001,end_frame=1200):
         env_file = "C:/Users/PERMAN/Documents/houdini18.5/houdini.env"
         search_text = "# Glacier Variables"

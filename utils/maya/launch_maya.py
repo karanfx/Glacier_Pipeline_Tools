@@ -12,7 +12,7 @@ def setup_env(toolname,username,proj,seq,shot,task,shot_dir,start_frame=1001,end
                      "JOB":str(job),"TASK":str(task),"G_START": str(start_frame),"G_END": str(end_frame)}
 
     for var,data in variables.items():    
-        os.environ['var'] = data
+        os.environ[var] = data
 
     #Setup Frame Range 
     start_frame = int(os.environ.get('G_START'))
