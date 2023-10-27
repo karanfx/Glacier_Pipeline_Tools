@@ -47,12 +47,6 @@ def setup_env(toolname,username,proj,seq,shot,task,shot_dir,start_frame=1001,end
                 
 
 
-#Launch DCC with selected version
-def launch_version(soft_dir,file_dir):
-    import subprocess
-    subprocess.Popen([soft_dir, file_dir])
-
-
 #TEST OUT CLI 
 # if toolname == "Houdini_CLI":
 #     #open def scene

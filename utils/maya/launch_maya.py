@@ -1,7 +1,3 @@
-def launch_version(soft_dir,file_dir):
-    import subprocess
-    subprocess.Popen([soft_dir, file_dir])
-
 
 def setup_env(toolname,username,proj,seq,shot,task,shot_dir,start_frame=1001,end_frame=1200):
     import os

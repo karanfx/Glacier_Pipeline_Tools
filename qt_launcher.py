@@ -30,18 +30,7 @@ username = userdata.get('user')
 studio_dir = userdata.get('studiodir')
 
 tooldata = user_json.get('tools')
-# print(tooldata)
 
-# #Import shot status 
-# shot_status = "bin/data/shot_status.json"
-# with open(shot_status,"r") as st:
-#     shot_stat = json.load(st)
-# userdata = shot_stat.get('User_Data')
-
-# username = userdata.get('user')
-# studio_dir = userdata.get('studiodir')
-
-# tooldata = user_json.get('tools')
 
 
 class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
@@ -97,6 +86,10 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         #Update data in combo boxs
         self.dir_tree_widget.itemSelectionChanged.connect(self.get_tree_sel)
         self.dir_tree_widget.itemSelectionChanged.connect(self.populate_versions)
+
+        self.project_cB.currentTextChanged.connect(self.populate_versions)
+        self.seq_cB.currentTextChanged.connect(self.populate_versions)
+        self.shot_cB.currentTextChanged.connect(self.populate_versions)
 
 
         #Load ComboBox after loading and creating dirs
@@ -218,21 +211,20 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
     #populate versions
     def populate_versions(self):
         self.version_file_CB.clear()
+        
         #Get Current Data
-        sel_show = self.project_cB.currentText()
-        sel_seq = self.seq_cB.currentText()
-        sel_shot = self.shot_cB.currentText()
-        tool = self.tools_cB.currentText()
+        inputs = self.get_inputs()
+        
+        version_path = inputs.get("VERSION_PATH")
+        version_path = os.path.dirname(version_path)
 
-        version_path = os.path.join(studio_dir,sel_show,sel_seq,sel_shot,username,tool,"scene")
-        # print(os.listdir(version_path))
         versions = os.listdir(version_path)
-        # versions = [item for item in os.listdir(version_path) if os.path.isdir(os.path.join(version_path, item))]
         
         if len(versions) == 0:
             self.version_file_CB.addItems(["No Version Found"])
         else:
-            # versions.remove('backup')
+            if 'backup' in versions:
+                versions = versions.remove('backup')
             versions.sort(reverse=True)
             
             self.version_file_CB.addItems(versions)

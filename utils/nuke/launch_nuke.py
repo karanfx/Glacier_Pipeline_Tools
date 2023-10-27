@@ -1,5 +1,3 @@
-# "nuke_path" "script/path.py"
-# "nuke_path" -t "script/path.py"
 def setup_env(toolname,username,proj,seq,shot,shot_dir,start_frame=1001,end_frame=1200):
 
     import os
@@ -10,8 +8,3 @@ def setup_env(toolname,username,proj,seq,shot,shot_dir,start_frame=1001,end_fram
      
     for var,val in variables:
         os.environ[var] = val
-
-
-def launch_version(soft_dir,file_dir):
-    import subprocess
-    subprocess.Popen([soft_dir, file_dir])
