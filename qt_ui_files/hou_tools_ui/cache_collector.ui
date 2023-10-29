@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>cacheCollector</class>
+ <widget class="QWidget" name="cacheCollector">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>574</width>
+    <height>473</height>
+   </rect>
+  </property>
+  <property name="windowTitle">
+   <string>Form</string>
+  </property>
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0">
+    <widget class="QTreeWidget" name="cache_data_TW">
+     <column>
+      <property name="text">
+       <string>Cache Node</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>File Count</string>
+      </property>
+     </column>
+     <column>
+      <property name="text">
+       <string>Cache Path</string>
+      </property>
+     </column>
+    </widget>
+   </item>
+   <item row="1" column="0">
+    <layout class="QHBoxLayout" name="horizontalLayout">
+     <item>
+      <widget class="QPushButton" name="delete_older_cache_PB">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>31</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Only Keep Current Version</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="collect_all_cache_PB">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>31</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Collect All Caches</string>
+       </property>
+      </widget>
+     </item>
+     <item>
+      <widget class="QPushButton" name="collect_selected_cache_PB">
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>31</height>
+        </size>
+       </property>
+       <property name="text">
+        <string>Collect Selected Caches</string>
+       </property>
+      </widget>
+     </item>
+    </layout>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>
