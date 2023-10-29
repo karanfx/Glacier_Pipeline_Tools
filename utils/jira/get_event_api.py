@@ -4,9 +4,21 @@ import requests
 from requests.auth import HTTPBasicAuth
 import json
 
+api_cred = "E:/Work/python_dev/Glacier_pipeline_tools/creds/jira_api_cred.json"
+
+
+#get email and password
+import json
+with open(api_cred) as config_file:
+    config = json.load(config_file)
+
+MAIL_ID = config.get("MAIL_ID")
+API_KEY = config.get("API_KEY")
+    
+
 url = "https://karanmirajkar.atlassian.net/rest/api/3/issue/GPT-3"
 
-auth = HTTPBasicAuth("karan.fxartist@gmail.com", "ATATT3xFfGF0vSsZ4ILg-3TqJBrFwmq6CZVUAlDyelcehKo4dCkGo2x4pKMWtOwygHgedYH_XuFSbusDNcPkHUwNSlESuS6ce9bqXx6aJOdUyJI2PdxSFjBJfIpvSE65TRb3tHxhItseZ5DH8oT8rZnD0nLLFNl0z3rXVtFbyfKYQqZzrm6AyTQ=4C10CEF5")
+auth = HTTPBasicAuth(MAIL_ID, API_KEY)
 
 headers = {
   "Accept": "application/json"
