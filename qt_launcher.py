@@ -24,6 +24,7 @@ import ui.about_page
 user_json_path = "bin/data/user.json"
 with open(user_json_path,"r") as uf:
     user_json = json.load(uf)
+
 userdata = user_json.get('User_Data')
 
 username = userdata.get('user')
@@ -49,6 +50,8 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
     
         
         self.toolssetup()
+        self.action_Create_Project_2.setText("Create Project")
+
         #Populate Combo Boxs
         self.project_cB.currentTextChanged.connect(self.populate_seq)
         self.seq_cB.currentTextChanged.connect(self.populate_shot)
@@ -102,6 +105,7 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
     #Toggle Dark Mode
     def toggle_dark(self):
         self.setStyleSheet(qdarkstyle.load_stylesheet(qt_api = 'PySide6'))
+        
         
     #Get Data from Sheet
     def populate_status(self):
@@ -171,7 +175,7 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         manual_dir = self.manual_path_Ldit.text()
         tool = self.tools_cB.currentText()
         version = self.version_file_CB.currentText()
-        shot_dir =  os.path.join(studio_dir,sel_show,sel_seq,sel_shot,username)
+        shot_dir =  os.path.join(studio_dir,sel_show,sel_seq,sel_shot)
         shot_dir = shot_dir.replace("\\","/")
         version_path  = os.path.join(studio_dir,sel_show,sel_seq,sel_shot,username,tool,"scene",version)
 
@@ -218,13 +222,19 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         version_path = inputs.get("VERSION_PATH")
         version_path = os.path.dirname(version_path)
 
-        versions = os.listdir(version_path)
+        try:
+            versions = os.listdir(version_path)
+        except:
+            versions = []
+
         
         if len(versions) == 0:
             self.version_file_CB.addItems(["No Version Found"])
         else:
             if 'backup' in versions:
                 versions = versions.remove('backup')
+            else:
+                pass
             versions.sort(reverse=True)
             
             self.version_file_CB.addItems(versions)

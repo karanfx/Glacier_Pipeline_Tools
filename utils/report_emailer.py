@@ -1,3 +1,5 @@
+api_cred = "E:/Work/python_dev/Glacier_pipeline_tools/creds/gmail_app.json"
+
 #Submit the concerns and reports
 from PySide6 import QtWidgets
 import PySide6.QtGui
@@ -7,7 +9,7 @@ import json
 import ui.report_form
 
 #get email and password
-with open("bin\creds\gmail_app.json") as config_file:
+with open(api_cred) as config_file:
     config = json.load(config_file)
 
 MAIL_ID = config.get("MAIL_ID")

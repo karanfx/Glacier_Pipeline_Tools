@@ -12,7 +12,6 @@ import os
 #print(nuke.env)
 # print(os.getenv("NUKE_TEMP_DIR"))
 
-# 
 
 #GET ALL RENDERS AND PLATES
 renders = ["a","b","c","d","e"]

@@ -15,16 +15,14 @@ from shiboken2 import wrapInstance
 mayaMainWindowPtr = omui.MQtUtil.mainWindow()
 mayaMainWindow = wrapInstance(long(mayaMainWindowPtr), QWidget) 
 
-uiFile = "E:/Work/python_dev/QT_project_launcher/qt_ui_files/hou_tools_ui/scene_builder.ui"
-
-# layout = "D:/test_studio/Show01/Seq_AB/Shot_AB001/libs/layout/"
+uiFile = "E:/Work/python_dev/Glacier_pipeline_tools/project_glacier/qt_ui_files/hou_tools_ui/scene_builder.ui"
+glacier_icon = "E:/Work/python_dev/Glacier_pipeline_tools/project_glacier/bin/logo/favicon_sq_small.png"
 
 # get layout Dirs
 shot_dir = os.environ.get('SHOT_DIR')
 shot_dir = shot_dir.strip('\"')
 layout = os.path.join(shot_dir,'libs','layout')
 anim = os.path.join(shot_dir,'libs/anim')
-print(layout)
 
 
 class BuildScene(QWidget):    
@@ -40,7 +38,7 @@ class BuildScene(QWidget):
         
         #add logo and window name
         self.setWindowTitle("Glacier Apps - Scene Builder")
-        self.setWindowIcon(QtGui.QIcon("E:/Work/python_dev/QT_project_launcher/bin/logo/favicon_sq_small.png"))
+        self.setWindowIcon(QtGui.QIcon(glacier_icon))
 
         self.populate_assets()
         self.ui.Build_PB.clicked.connect(self.build)

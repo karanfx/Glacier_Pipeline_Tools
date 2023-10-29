@@ -1,3 +1,5 @@
+api_cred = "E:/Work/python_dev/Glacier_pipeline_tools/creds/pipelineapi-393910-b7f6abbedec1-credential_key.json"
+
 import gspread
 from oauth2client.service_account import ServiceAccountCredentials
 from pprint import pprint
@@ -6,7 +8,7 @@ import json
 
 #Connect and get the Data from Google Sheets/Drive API
 scope = ["https://spreadsheets.google.com/feeds","https://www.googleapis.com/auth/spreadsheets","https://www.googleapis.com/auth/drive.file","https://www.googleapis.com/auth/drive"]
-creds = ServiceAccountCredentials.from_json_keyfile_name("bin\creds\pipelineapi-393910-b7f6abbedec1-credential_key.json",scope)
+creds = ServiceAccountCredentials.from_json_keyfile_name(api_cred,scope)
 client = gspread.authorize(creds)
 sheet = client.open("Studio_Management").sheet1
 
@@ -30,7 +32,7 @@ def get_status(username):
     with open("bin/data/shot_status.json", "w") as file:
         json.dump(data,file,indent=4)     
 
-get_status("Karan")
+# get_status("Karan")
 # print(col)
 
 
