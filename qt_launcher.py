@@ -227,17 +227,14 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         except:
             versions = []
 
-        
         if len(versions) == 0:
             self.version_file_CB.addItems(["No Version Found"])
         else:
             if 'backup' in versions:
-                versions = versions.remove('backup')
-            else:
-                pass
+                versions.remove('backup')
             versions.sort(reverse=True)
             
-            self.version_file_CB.addItems(versions)
+        self.version_file_CB.addItems(versions)
 
     def set_manual_dir(self):
         inputs = self.get_inputs()
