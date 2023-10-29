@@ -1,0 +1,569 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<shelfDocument>
+  <!-- This file contains definitions of shelves, toolbars, and tools.
+ It should not be hand-edited when it is being used by the application.
+ Note, that two definitions of the same element are not allowed in
+ a single file. -->
+
+  <tool name="obj_merge" label="Object Merge" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[#create object merge for selected node
+
+import hou
+
+for node in hou.selectedNodes():
+    path = node.path()
+    #print(path)
+    name = path.split("/")
+    geo_name = name[-1]
+    obj = hou.node("/obj")
+    geo_node = obj.createNode("geo",geo_name)
+    object_merge_node = geo_node.createNode("object_merge",(geo_name + "_object_merge"))
+    object_merge_node.parm("objpath1").set(path)
+]]></script>
+  </tool>
+
+  <tool name="open_flipbook" label="OpenGL Flipbook" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import hou
+
+out = hou.node("out/")
+cameras = hou.selectedNodes()
+for cam in cameras:
+    opengl_node = out.createNode("opengl","opengl_flipbook")
+    opengl_node.parm("camera").set(cam.path())
+    opengl_node.parm("trange").set(1)
+    opengl_node.parm("aamode").set(4)
+    opengl_node.parm("f1").setExpression("$FSTART")
+    opengl_node.parm("f2").setExpression("$FEND")
+    opengl_node.parm("execute").pressButton()]]></script>
+  </tool>
+
+  <tool name="test_render" label="Render Setup" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import hou
+
+for node in hou.selectedNodes():
+    path = node.path()
+    #print(path)
+    #get node names
+    name = path.split("/")
+    render_name = "mantra" + name[-1]
+    mat_name = "shader" + name[-1]
+    geo_name = "RNDR_" + name[-1]
+    
+    #create geo/objectmerge node 
+    obj = hou.node("/obj")
+    geo_node = obj.createNode("geo",geo_name)
+    object_merge_node = geo_node.createNode("object_merge",(geo_name + "_object_merge"))
+    #add object
+    object_merge_node.parm("objpath1").set(path)
+    #add output node
+    output_node = geo_node.createNode("output","OUTPUT")
+    output_node.setInput(0,object_merge_node,0)
+    
+    #create render node
+    out = hou.node("/out")
+    render_node = out.createNode("ifd",render_name)
+    #pick render objects
+    render_node.parm("forceobject").set(geo_node.path())
+
+    render_node.parm("trange").set(1)
+    #render_node.parm("vm_renderengine").set(3)
+    render_node.parm("f1").setExpression("$FSTART")
+    render_node.parm("f2").setExpression("$FEND")
+    
+    #create material
+    mat = hou.node("/mat")
+    mat_node = mat.createNode("principledshader::2.0",mat_name)
+    #assign material
+    geo_node.parm("shop_materialpath").set(mat_node.path())
+    ]]></script>
+  </tool>
+
+  <tool name="collect_caches" label="Collect Cache" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import hou
+import os 
+import shutil
+
+obj = hou.node("/obj")
+#children = obj.children()
+children = obj.allSubChildren()
+for child in children:
+    #print(child.type().name())
+    #print(child.NodeTypeCategory())
+    if child.type().name() == "filecache":
+        cache_path = child.parm("file").eval()
+        cache_folder = os.path.dirname(cache_path)
+        print(cache_path)
+
+        target_folder = "D:/Work/houdinifx/pipe_test/Show01/v001/"
+        #print(child.path())
+        #shutil.copytree(cache_path,target_folder)
+        if os.path.exists(cache_folder):
+            print(cache_folder)
+            cache_dir = os.path.dirname(cache_folder)
+            cache_name = cache_dir.split("/")[-1]
+            print(cache_name)
+            target_dir = os.path.join(target_folder,cache_name)
+            #os.mkdir(target_dir)
+            print(target_dir)
+            shutil.copytree(cache_folder,target_dir)
+            #shutil.copy(cache_path,target_folder)
+        else:
+            print("not found")
+        #    pass]]></script>
+  </tool>
+
+  <tool name="asset_import" label="Asset Importor" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import os
+import hou
+
+def import_fbx(dir):
+    ext = os.path.splitext(dir)[1]
+    ext = os.path.splitext(dir)[1]
+    name = os.path.basename(dir).replace(ext,"")
+    if ext == ".fbx":
+        fbx_dirs = []
+        subnet = hou.hipFile.importFBX(file_name=dir, import_geometry=True)
+        print(subnet)
+    else:
+        pass
+    
+
+def import_alembic(dir):
+    ext = os.path.splitext(dir)[1]
+    name = os.path.basename(dir).replace(ext,"")
+    ext = os.path.splitext(dir)[1]
+    if ext == ".abc":
+        obj = hou.node("obj/")
+        target_node = obj.createNode("geo",name)
+
+        alembic_sop = target_node.createNode("alembic",name)
+        alembic_sop.parm("fileName").set(dir)
+        alembic_sop.cook()
+    else:
+        pass
+
+
+
+def import_usd(dir):
+    ext = os.path.splitext(dir)[1]
+    name = os.path.basename(dir).replace(ext,"")
+    if ext == ".fbx":
+        obj = hou.node("stage/")
+        sop_import = obj.createNode("sopimport",name)
+        sop_import.parm("savepath").set(dir)
+        sop_import.cook()
+    else:
+        pass
+
+
+layout = "E:/Work/houdinifx/pipe_test/Show01/Seq_AB/Shot_AB001/layout/"
+for sub in os.listdir(layout):
+    dirs = os.path.join(layout,sub)
+    # print(dirs)
+    for asset in os.listdir(dirs):
+        asset_dirs = os.path.join(dirs,asset)
+        ext = os.path.splitext(asset_dirs)[1]
+        name = os.path.basename(asset_dirs).replace(ext,"")
+        print(name)
+
+        #call imports
+        import_alembic(asset_dirs)
+        import_fbx(asset_dirs)
+        import_usd(asset_dirs)
+        # print(asset_dirs)]]></script>
+  </tool>
+
+  <tool name="set_var" label="Set Var" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import hou
+
+# Set a custom environment variable
+show_name = "Show01"
+shot_name = "Shot_AB01"
+user_name = "perman"
+shot_dir = show_name + "/" + shot_name + "/" + user_name
+variables = { "SHOW": show_name, "SHOT": shot_name,
+             "SHOT_DIR":shot_dir,"USER":user_name}
+
+for var_name,var_val in variables.items():
+    # Set the environment variable
+    hou.hscript("setenv {}={}".format(var_name, var_val))
+
+    print("Environment variable {} set to: {}".format(var_name, hou.getenv(var_name)))
+]]></script>
+  </tool>
+
+  <tool name="crowd_preview" label="Crowd Preview" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import hou
+
+
+anim_dir = "D:\test_studio\Show01\libs\crowd\character\anim\sword and shield idle.fbx"
+
+fbx_imp = hou.hipFile.importFBX(file_name=anim_dir,import_geometry = True
+
+]]></script>
+  </tool>
+
+  <toolshelf name="glacier_tools0" label="Glacier Tools">
+    <memberTool name="preview"/>
+    <memberTool name="fbx_pre"/>
+    <memberTool name="import_asset"/>
+    <memberTool name="collect_cache"/>
+    <memberTool name="obj_merge0"/>
+    <memberTool name="quick_render"/>
+    <memberTool name="tool_1"/>
+  </toolshelf>
+
+  <tool name="preview" label="FBX Preview" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import os
+import hou
+
+def captureFbx(fbxPath, cameraDistance=350):
+
+    for fbx in os.listdir(fbxPath):
+        fbx_dir = os.path.join(fbxPath,fbx)
+        par_dir = os.path.dirname(os.path.dirname(fbxPath))
+        import pprint
+        pprint.pprint(par_dir)
+        # Import fbx
+        subnet = hou.hipFile.importFBX(file_name=fbx_dir, import_geometry=True)
+        sub_name = subnet.name()
+        subnet = subnet[0]
+        
+        print(sub_name)
+        flpbk_dir = os.path.join(par_dir,sub_name,"render")
+        pprint.pprint(fbx_dir)
+
+
+        # Turn off joint viz
+        for node in subnet.children():
+            if 'bone' in node.name():
+                node.setDisplayFlag(0)
+
+        # Get main joint (usually Hips)
+        rootJntNode = ''
+        for node in subnet.children():
+            if 'Hips' in node.name():
+                rootJntNode = node
+                break
+
+
+
+
+        # Create camera and constrain to fbx
+        if rootJntNode:
+            mainJntTxPath = rootJntNode.parm('tx').path()
+            mainJntTyHieght = rootJntNode.parm('ty').eval()
+            mainJntTzPath = rootJntNode.parm('tz').path()
+
+            cam = hou.node('/obj').createNode('cam')
+            cam.parm('tx').setExpression('ch("%s") + %d' % (mainJntTxPath, int(cameraDistance)))
+            cam.parm('ty').set(mainJntTyHieght)
+            cam.parm('tz').setExpression('ch("%s") + %d' % (mainJntTzPath, int(cameraDistance)))
+            cam.parm('ry').set(45)
+
+            # Add openGL
+            openGl =  hou.node('/out').createNode('opengl')
+            # set frame range
+            openGl.parm('trange').set(1)
+            frameRange = hou.playbar.playbackRange()
+            openGl.parm('/out/opengl1/f1').set(frameRange[0])
+            openGl.parm('/out/opengl1/f2').set(frameRange[1])
+
+            # set fbx path as comment
+            openGl.parm('/out/opengl1/vpcomment').set(fbxPath)
+            openGl.parm('/out/opengl1/tres').set(1)
+            openGl.parmTuple('/out/opengl1/res').set((720, 720))
+
+            # make images path
+            out_name = sub_name + ".$F4.jpeg"
+            outputPath = os.path.join(flpbk_dir,out_name)
+            openGl.parm('/out/opengl1/picture').set(outputPath)
+
+            openGl.parm('aamode').set(3)
+            openGl.parm('/out/opengl1/shadingmode').set(0)
+            openGl.parm('/out/opengl1/execute').pressButton()
+
+        
+fbxPath = "D:/test_studio/Show01/libs/crowd/character/fbx/"
+fbx_dirs = "D:/test_studio/Show01/libs/crowd/character/fbx/"
+
+
+# for fbx in os.listdir(fbx_dirs):
+#     fbx_dir = os.path.join(fbx_dirs,fbx)
+#     par_dir = os.path.dirname(os.path.dirname(fbx_dirs))
+#     import pprint
+#     pprint.pprint(fbx_dir)
+#     pprint.pprint(par_dir)
+
+captureFbx(fbxPath, cameraDistance=350)]]></script>
+  </tool>
+
+  <tool name="fbx_pre" label="Single FBX Preview" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import os
+import hou
+
+def captureFbx(fbxPath, cameraDistance=350):
+
+    
+    # fbx_dir = os.path.join(fbxPath,fbx)
+    par_dir = os.path.dirname(os.path.dirname(fbxPath))
+    import pprint
+    pprint.pprint(par_dir)
+    # Import fbx
+    subnet = hou.hipFile.importFBX(file_name=fbxPath, import_geometry=True)
+    subnet = subnet[0]
+
+    sub_name = subnet.name()
+    
+    
+    print(sub_name)
+    flpbk_dir = os.path.join(par_dir,sub_name,"render")
+    pprint.pprint(fbxPath)
+
+
+    # # Turn off joint viz
+    # for node in subnet.children():
+    #     if 'bone' in node.name():
+    #         node.setDisplayFlag(0)
+
+    # Get main joint (usually Hips)
+    rootJntNode = ''
+    for node in subnet.children():
+        if 'Hips' in node.name():
+            rootJntNode = node
+            break
+
+
+    # Create camera and constrain to fbx
+    if rootJntNode:
+        mainJntTxPath = rootJntNode.parm('tx').path()
+        mainJntTyHieght = rootJntNode.parm('ty').eval()
+        mainJntTzPath = rootJntNode.parm('tz').path()
+
+        cam = hou.node('/obj').createNode('cam')
+        cam.parm('tx').setExpression('ch("%s") + %d' % (mainJntTxPath, int(cameraDistance)))
+        cam.parm('ty').set(mainJntTyHieght)
+        cam.parm('tz').setExpression('ch("%s") + %d' % (mainJntTzPath, int(cameraDistance)))
+        cam.parm('ry').set(45)
+
+        # Add openGL
+        openGl =  hou.node('/out').createNode('opengl')
+
+        hou.playbar.setFrameRange(1,50)
+        # set frame range
+        openGl.parm('trange').set(1)
+        frameRange = hou.playbar.playbackRange()
+        openGl.parm('/out/opengl1/f1').set(frameRange[0])
+        openGl.parm('/out/opengl1/f2').set(frameRange[1])
+
+        # set fbx path as comment
+        openGl.parm('/out/opengl1/vpcomment').set(fbxPath)
+        openGl.parm('/out/opengl1/tres').set(1)
+        openGl.parmTuple('/out/opengl1/res').set((720, 720))
+
+
+        # make images path
+        out_name = sub_name + ".$F4.jpeg"
+        outputPath = os.path.join(flpbk_dir,out_name).replace("\\","/")
+        openGl.parm('/out/opengl1/picture').set(outputPath)
+
+        openGl.parm('aamode').set(3)
+        openGl.parm('/out/opengl1/shadingmode').set(0)
+        openGl.parm('/out/opengl1/execute').pressButton()
+
+        
+fbxPath = "D:/test_studio/Show01/libs/crowd/character/fbx/draw sword 1.fbx"
+fbx_dirs = "D:/test_studio/Show01/libs/crowd/character/fbx/"
+
+
+# # fbx_dir = os.path.join(fbx_dirs,fbx)
+# par_dir = os.path.dirname(os.path.dirname(fbx_dirs))
+# import pprint
+# # pprint.pprint(fbx_dir)
+# pprint.pprint(par_dir)
+
+captureFbx(fbxPath, cameraDistance=350)]]></script>
+  </tool>
+
+  <tool name="tool_1" label="New Tool" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[hou.hipFile.clear()
+]]></script>
+  </tool>
+
+  <tool name="import_asset" label="Import Asset" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import os
+import hou
+
+def import_fbx(dir):
+    ext = os.path.splitext(dir)[1]
+    ext = os.path.splitext(dir)[1]
+    name = os.path.basename(dir).replace(ext,"")
+    if ext == ".fbx":
+        fbx_dirs = []
+        subnet = hou.hipFile.importFBX(file_name=dir, import_geometry=True)
+        print(subnet)
+    else:
+        pass
+    
+
+def import_alembic(dir):
+    ext = os.path.splitext(dir)[1]
+    name = os.path.basename(dir).replace(ext,"")
+    ext = os.path.splitext(dir)[1]
+    if ext == ".abc":
+        obj = hou.node("obj/")
+        target_node = obj.createNode("geo",name)
+
+        alembic_sop = target_node.createNode("alembic",name)
+        alembic_sop.parm("fileName").set(dir)
+        alembic_sop.cook()
+    else:
+        pass
+
+
+
+def import_usd(dir):
+    ext = os.path.splitext(dir)[1]
+    name = os.path.basename(dir).replace(ext,"")
+    if ext == ".fbx":
+        obj = hou.node("stage/")
+        sop_import = obj.createNode("sopimport",name)
+        sop_import.parm("savepath").set(dir)
+        sop_import.cook()
+    else:
+        pass
+
+
+layout = "E:/Work/houdinifx/pipe_test/Show01/Seq_AB/Shot_AB001/layout/"
+for sub in os.listdir(layout):
+    dirs = os.path.join(layout,sub)
+    # print(dirs)
+    for asset in os.listdir(dirs):
+        asset_dirs = os.path.join(dirs,asset)
+        ext = os.path.splitext(asset_dirs)[1]
+        name = os.path.basename(asset_dirs).replace(ext,"")
+        print(name)
+
+        #call imports
+        import_alembic(asset_dirs)
+        import_fbx(asset_dirs)
+        import_usd(asset_dirs)
+        # print(asset_dirs)]]></script>
+  </tool>
+
+  <tool name="collect_cache" label="Collect Caches" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import hou
+import os 
+import shutil
+
+obj = hou.node("/obj")
+#children = obj.children()
+children = obj.allSubChildren()
+for child in children:
+    #print(child.type().name())
+    #print(child.NodeTypeCategory())
+    if child.type().name() == "filecache":
+        cache_path = child.parm("file").eval()
+        cache_folder = os.path.dirname(cache_path)
+        print(cache_path)
+
+        target_folder = "D:/Work/houdinifx/pipe_test/Show01/v001/"
+        #print(child.path())
+        #shutil.copytree(cache_path,target_folder)
+        if os.path.exists(cache_folder):
+            print(cache_folder)
+            cache_dir = os.path.dirname(cache_folder)
+            cache_name = cache_dir.split("/")[-1]
+            print(cache_name)
+            target_dir = os.path.join(target_folder,cache_name)
+            #os.mkdir(target_dir)
+            print(target_dir)
+            shutil.copytree(cache_folder,target_dir)
+            #shutil.copy(cache_path,target_folder)
+        else:
+            print("not found")
+        #    pass]]></script>
+  </tool>
+
+  <tool name="obj_merge0" label="Object Merge" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[#create object merge for selected node
+
+import hou
+
+for node in hou.selectedNodes():
+    path = node.path()
+    #print(path)
+    name = path.split("/")
+    geo_name = name[-1]
+    obj = hou.node("/obj")
+    geo_node = obj.createNode("geo",geo_name)
+    object_merge_node = geo_node.createNode("object_merge",(geo_name + "_object_merge"))
+    object_merge_node.parm("objpath1").set(path)
+]]></script>
+  </tool>
+
+  <tool name="quick_render" label="Quick Render" icon="PLASMA_App">
+    <script scriptType="python"><![CDATA[import hou
+
+for node in hou.selectedNodes():
+    path = node.path()
+    #print(path)
+    #get node names
+    name = path.split("/")
+    render_name = "mantra" + name[-1]
+    mat_name = "shader" + name[-1]
+    geo_name = "RNDR_" + name[-1]
+    
+    #create geo/objectmerge node 
+    obj = hou.node("/obj")
+    geo_node = obj.createNode("geo",geo_name)
+    geo_node.setColor(hou.Color((1.0,0.25,0.25)))
+    object_merge_node = geo_node.createNode("object_merge",(geo_name + "_object_merge"))
+    #add object
+    object_merge_node.parm("objpath1").set(path)
+    #add output node
+    output_node = geo_node.createNode("output","OUTPUT")
+    output_node.setInput(0,object_merge_node,0)
+
+    
+    
+
+    #create render node
+    out = hou.node("/out")
+    render_node = out.createNode("ifd",render_name)
+
+    # render_node.parm("glstyle").set(1)
+    #pick render objects
+
+    #set cam
+    children = obj.allSubChildren()
+    for child in children:
+
+        if child.type().name() == "camera":
+            print(child.name())
+            render_node.parm("camera").set(child.name())
+
+        else:
+            render_node.parm("camera").set("/obj/cam2")
+
+    render_node.parm("forceobject").set(geo_node.path())
+
+    render_node.parm("trange").set(1)
+    #render_node.parm("vm_renderengine").set(3)
+    render_node.parm("f1").setExpression("$FSTART")
+    render_node.parm("f2").setExpression("$FEND")
+    
+    #create material
+    mat = hou.node("/mat")
+    mat_node = mat.createNode("principledshader::2.0",mat_name)
+    #assign material
+    geo_node.parm("shop_materialpath").set(mat_node.path())
+    ]]></script>
+  </tool>
+
+  <shelfSetEdit name="shelf_set_1" fileLocation="C:/PROGRA~1/SIDEEF~1/HOUDIN~1.596/houdini/toolbar/ShelfDefinitions.shelf">
+    <addMemberToolshelf name="glacier_tools0" inPosition="17"/>
+  </shelfSetEdit>
+
+  <shelfSetEdit name="shelf_set_td" fileLocation="C:/PROGRA~1/SIDEEF~1/HOUDIN~1.596/houdini/toolbar/ShelfDefinitions.shelf"/>
+</shelfDocument>
