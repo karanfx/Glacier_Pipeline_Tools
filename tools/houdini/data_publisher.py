@@ -25,7 +25,6 @@ def seq_converter(ffmpeg_path,input_seq,output_dir):
 
     try:
         subprocess.run(ffmpeg_command, check=True)
-        # print("Image sequence converted to video successfully.")
     except subprocess.CalledProcessError as e:
         print("Error:", e)
 
