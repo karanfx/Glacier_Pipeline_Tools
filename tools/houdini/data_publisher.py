@@ -25,6 +25,7 @@ def seq_converter(ffmpeg_path,input_seq,output_dir):
 
     try:
         subprocess.run(ffmpeg_command, check=True)
+        # print("Image sequence converted to video successfully.")
     except subprocess.CalledProcessError as e:
         print("Error:", e)
 
@@ -48,7 +49,7 @@ def file_count(cache_path):
         count = len(os.listdir(cache_folder))
         return count
 
-uiFile = "E:/Work/python_dev/QT_project_launcher/qt_ui_files/hou_tools_ui/cache_publisher.ui"
+uiFile = "E:/Work/python_dev/Glacier_pipeline_tools/project_glacier/Glacier_Pipeline_Tools/qt_ui_files/hou_tools_ui/cache_publisher.ui"
 
 class publish_version(QtWidgets.QWidget):
     """ Browser preview quicktimes of fbxs
@@ -63,6 +64,7 @@ class publish_version(QtWidgets.QWidget):
         self.setWindowIcon(QtGui.QIcon("E:/Work/python_dev/QT_project_launcher/bin/logo/favicon_sq_small.png"))
 
         self.populate_caches()
+        self.populate_version()
         self.ui.publish_PB.clicked.connect(self.publish)
 
         #Get Flipbook Path
@@ -89,6 +91,23 @@ class publish_version(QtWidgets.QWidget):
                 item = QtWidgets.QTreeWidgetItem(list(cache_item))
                 item.setCheckState(0,QtCore.Qt.Unchecked)
                 self.ui.cache_tree_TW.addTopLevelItem(item)
+
+    def populate_version(self):
+        output_nodes = {"opengl":"picture","ifd":"vm_picture",
+                 "usdrender":"outputimage"}
+
+            
+        for node in hou.selectedNodes():
+            for type,out_path in output_nodes.items():
+                # print(type,out_path)
+                if node.type().name() == type:
+                    render_path = node.parm(out_path).eval()
+                    import re
+
+                    render_path = re.sub(r'\d{4}', '####', render_path)
+                    self.ui.vers_path_LE.setText(render_path)
+                else:
+                    pass
 
     def manual_dir(self):
         man_path,ext = QtWidgets.QFileDialog.getOpenFileName(self,'Select Folder')
