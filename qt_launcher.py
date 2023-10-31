@@ -265,6 +265,9 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         inputs = self.get_inputs()
         toolname = inputs.get("TOOL")
 
+        version_file_path = inputs.get("VERSION_PATH")
+        # print(version_file_path)
+
         task = "FX"
         start_frame = 1001
         end_frame = 1200
@@ -280,6 +283,7 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         #Open Software with file
         import subprocess
         subprocess.Popen([tooldata[toolname]], env={**os.environ, **env_variables})
+        
 
     #Open Versions with respective DCC and setup env Variables
     def OpenVersion(self):
@@ -289,6 +293,8 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
         tool = inputs.get("TOOL")
         
         version_file_path = inputs.get("VERSION_PATH")
+        print(version_file_path)
+
 
         task = "FX"
         start_frame = 1001
@@ -304,7 +310,10 @@ class qt_launcher(main_ui.Ui_MainWindow,QtWidgets.QMainWindow):
 
         #Open Software with file
         import subprocess
-        subprocess.Popen([tooldata[tool], version_file_path], env={**os.environ, **env_variables})
+        if not os.path.exists(version_file_path):
+            subprocess.Popen([tooldata[tool]], env={**os.environ, **env_variables})
+        else:
+            subprocess.Popen([tooldata[tool], version_file_path], env={**os.environ, **env_variables})
 
 
 #Populating other UIs/Dailog
