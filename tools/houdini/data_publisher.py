@@ -9,13 +9,13 @@ import hou
 shot_dir = os.environ.get('SHOT_DIR')
 task = os.environ.get('TASK')
 shot_name = os.environ.get('SHOT')
-
+start_frame = os.environ.get('G_START')
 
 #converting image seq into video
-def seq_converter(ffmpeg_path,input_seq,output_dir):
+def seq_converter(ffmpeg_path,input_seq,start_frame,output_dir):
     import subprocess
     ffmpeg_command = [
-        ffmpeg_path,
+        ffmpeg_path, "-hide_banner", "-start_number", str(start_frame),
         "-framerate", "24",
         "-i", input_seq,
         "-c:v", "libx264",
@@ -25,9 +25,9 @@ def seq_converter(ffmpeg_path,input_seq,output_dir):
 
     try:
         subprocess.run(ffmpeg_command, check=True)
-        # print("Image sequence converted to video successfully.")
     except subprocess.CalledProcessError as e:
         print("Error:", e)
+
 
 def save_backup_hip(vers_dir):
     #Save backup file
@@ -104,7 +104,7 @@ class publish_version(QtWidgets.QWidget):
                     render_path = node.parm(out_path).eval()
                     import re
 
-                    render_path = re.sub(r'\d{4}', '####', render_path)
+                    render_path = re.sub(r'\d{4}', "%04d", render_path)
                     self.ui.vers_path_LE.setText(render_path)
                 else:
                     pass
@@ -149,7 +149,7 @@ class publish_version(QtWidgets.QWidget):
         #Creating Video version
         vid_out = os.path.join(output_dir,(vers_name + ".mp4"))
         # print(vid_out)
-        seq_converter("ffmpeg",seq_input,vid_out)
+        seq_converter("ffmpeg",seq_input,start_frame,vid_out)
     
 
         #copy notes in .txt file

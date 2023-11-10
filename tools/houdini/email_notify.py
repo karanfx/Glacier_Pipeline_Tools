@@ -1,3 +1,6 @@
+import os
+import json
+
 
 api_cred = "E:/Work/python_dev/Glacier_pipeline_tools/creds/gmail_app.json"
 
@@ -41,8 +44,8 @@ def email_notif():
                 render_dir = current_node.parm(out_path).eval()
 
 
-    print(render_dir)
-    print(current_node)
+    # print(render_dir)
+    # print(current_node)
 
 
     subject = "Render {} is Complete!".format(current_node)
