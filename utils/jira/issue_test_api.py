@@ -6,7 +6,7 @@ import json
 
 url = "https://karanmirajkar.atlassian.net/rest/api/3/issue/GPT-3"
 
-auth = HTTPBasicAuth("karan.fxartist@gmail.com", "ATATT3xFfGF0vSsZ4ILg-3TqJBrFwmq6CZVUAlDyelcehKo4dCkGo2x4pKMWtOwygHgedYH_XuFSbusDNcPkHUwNSlESuS6ce9bqXx6aJOdUyJI2PdxSFjBJfIpvSE65TRb3tHxhItseZ5DH8oT8rZnD0nLLFNl0z3rXVtFbyfKYQqZzrm6AyTQ=4C10CEF5")
+auth = HTTPBasicAuth("email","jira_API_TOKEN")
 
 headers = {
   "Accept": "application/json",
