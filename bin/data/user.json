@@ -4,7 +4,6 @@
     "Maya" : "C:/Program Files/Autodesk/Maya2018/bin/maya.exe",
     "Nuke" : "C:/Program Files/Nuke14.0v1/Nuke14.0.exe",
     "Blender" : "C:/Program Files/Blender Foundation/Blender 3.4/blender-launcher.exe",
-    "Unreal" : "C:/Program Files/Epic Games/UE_5.1/Engine/Binaries/Win64/UnrealEditor.exe",
-    "Discord" : "C:/Users/PERMAN/AppData/Local/Discord/Update.exe"
+    "Unreal" : "C:/Program Files/Epic Games/UE_5.1/Engine/Binaries/Win64/UnrealEditor.exe"
     }
 }
