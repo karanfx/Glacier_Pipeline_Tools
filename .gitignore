@@ -3,3 +3,9 @@
 
 #Py caches
 __pycache__
+
+#test files
+.test
+
+
+#Credentials
