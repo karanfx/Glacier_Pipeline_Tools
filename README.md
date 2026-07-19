@@ -136,6 +136,7 @@ The developer has outlined an **ambitious roadmap** for Glacier. Planned enhance
 - **Alerts & Notifications:** Integrate email/Discord alerts for shot status changes and task completions.  
 - **Review Integration:** A review module to sync artist notes/annotations from review sessions directly with the launcher tasks.  
 
+```mermaid
 flowchart LR
     A[Google Sheet (Project Data)] --> B[Glacier Launcher fetches tasks]
     B --> C[User selects shot/task]
